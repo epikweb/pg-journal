@@ -22,7 +22,7 @@ describe('appendToStream', () => {
     const { expectedVersion } = await eventStore.readStreamForwards({
       aggregateId: 'wallet-123',
     })
-    assert.equal(expectedVersion, 3)
+    assert.equal(expectedVersion, 2)
   }).timeout(15000)
 
   it('should protect concurrent access to a single stream by retrying to insert at a higher sequence number', async () => {
@@ -46,9 +46,9 @@ describe('appendToStream', () => {
       )
     )
 
-    const { expectedVersion, events } = await eventStore.readStreamForwards({
+    const { expectedVersion } = await eventStore.readStreamForwards({
       aggregateId: '123',
     })
-    assert.equal(expectedVersion, 5)
+    assert.equal(expectedVersion, 4)
   }).timeout(15000)
 })

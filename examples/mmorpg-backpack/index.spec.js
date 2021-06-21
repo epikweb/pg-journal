@@ -9,7 +9,7 @@ const {
 } = require('../../test/_harness')
 
 describe('streamFromAll', () => {
-  it('should get events as they are appended to different streams', async () => {
+  it('should build a read model from 2 different streams', async () => {
     await arrangeDatabase()
     const eventStore = EventStore({ connectionString })
     const projectionStore = ProjectionStore({
