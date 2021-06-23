@@ -40,7 +40,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: docker-compose up -d
       - run: yarn
       - run: lerna bootstrap
       - run: cd packages/postgres-client && yarn test:setup && yarn test
@@ -59,7 +58,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: docker-compose up -d
       - run: yarn
       - run: lerna bootstrap
       - run: cd packages/example-multicurrency-ledger && yarn test:setup && yarn test
