@@ -1,0 +1,17 @@
+{
+  "name": "mmorpg-backpack",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev:infrastucture:up": "docker-compose up -f docker-compose-development.yml",
+    "dev:db:setup": "node sql/2021-06-20-initial-migration",
+    "test:infrastucture:up": "docker-compose up -f docker-compose-test.yml",
+    "test:db:setup": "node sql/2021-06-20-initial-migration"
+  },
+  "dependencies": {
+    "chai": "^4.3.4",
+    "pg": "^8.6.0"
+  }
+}

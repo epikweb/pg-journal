@@ -1,59 +1,70 @@
 # 🐘 pg-journal
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/StevePavlin/pg-journal/blob/master/LICENSE)
 
-**pg-journal** is a framework agnostic Event Store for PostgreSQL inspired by the works of Akka and multiple experimental event store attempts in [Immutable Stack](https://github.com/StevePavlin/immutable-stack).
 
-## Library/Documentation Goals
+**pg-journal** is an open source CQRS/Event Sourcing library for Node.js/PostgreSQL inspired by the works of Akka and multiple experimental event store attempts in [Immutable Stack](https://github.com/StevePavlin/immutable-stack).
 
-- ✅ Global position streaming/checkpointing for read models
-- ✅ Gap detection for projections
-- ✅ Opinionated projections/checkpointing
+The goal of the library is to:
+ - Provide a reusable set of functionality without lock-in that can be used to selectively apply CQRS/Event Sourcing in real world apps where its needed.
+ 
+
+##🏷 Features
+
+- ✅ **Real world** example apps
+- ✅ Projections with **exactly once** processing when using opinionated transactions
 - ✅ Opinionated write retry policy
-- ✅ Real life example apps
-- ✅ Competing consumers pattern for external consumer with implementations for AWS Kinesis/Redis
-- ✅ Support for table partitioning for faster btree rebuilds
-- ✅ Archiving to AWS S3 of old partitions
-- ✅ Seamless replication between clusters for blue-green deployments
-- ✅ Automated performance testing at scale on bigger EC2/RDS instances at scale (1B+ rows)
-- ✅ Guides on how to deal with every type of schema change that will happen in production and how it relates to standard state-based persistence
-- ✅ Flexibility of synchronous projections (same ACID transaction) or asynchronous
-- ✅ 100% test coverage
+- ✅ Opinionated projection library for Postgres to ensure exactly once processing
+
+##✨ Live Demo
+
+- TODO deploy some examples to Heroku or AWS
+
+##🙏🏻 Road map
+
+- 🔯 Solving combinatorial explosion of message contracts based on the order written on the command side (important)
+- 🔯 Opinionated redis projection library
+- 🔯 Write model tombstoning
+- 🔯 Read model tombstoning
+- 🔯 Gapless global ordering **without exclusive table locks** on the event journal
+- 🔯 Integration event relay plugin with **at least once** delivery to competing consumers (Redis/Kinesis implementations)
+- 🔯 Support for table partitioning for faster btree rebuilds
+- 🔯 Archiving to AWS S3 of old partitions
+- 🔯 Delayed commands (deadlines)
+- 🔯 Seamless replication between clusters for blue-green deployments
+- 🔯 Automated performance testing at scale on bigger EC2/RDS instances at scale (1B+ rows)
+- 🔯 100% test coverage
 
 
-## Installation
+## 🖥 Installation
 
 ```
-$ yarn add pg-journal
+$ yarn add @pg-journal/event-store
+$ yarn add @pg-journal/projection-plugin-postgres
 ```
 
-## Basic Usage
+##✍ Basic Usage
 
+- **pg-journal** requires an instance of [pg](https://github.com/brianc/node-postgres) in its constructor.
+- `ProjectionStore` is an opinionated projection API for postgres checkpointing if you decide to use postgres for one of your read models.
+
+```js
+TODO
 ```
-WIP
-```
 
-## Contributing
+##🧪 Contributing
 
-Pull requests are welcome 😃
+Pull requests are welcome 😃 Tests/linting rules should pass to be merged into mainline.
 
-Steps to run the test suite:
-
-- Create a local cluster (optional) - `docker-compose up`
-- Enter the following line in .env with the cluster credentials you're testing against:
-```
-DATABASE_URL=postgres://user:password@localhost:6337/pg_journal_test
-```
-- Drop, create and run schema DDL - `yarn db:setup`
-- Run tests - `yarn test`
+- Bootstrap infrastructure, databases and schemas - `yarn test:bootstrap`
+- Run tests across all packages - `npx lerna test`
 
 
+#### Test suites
+- Unit tests are using within each packages functional core to test inputs/outputs
+- Integration tests are using within each packages boundary to test its database contract
+- System tests are using in the `examples` folder to test integration between multiple package versions so atomic changes can be made
 
-## Credits
 
-- [Immutable Stack](https://github.com/StevePavlin/immutable-stack)
-- [Akka Persistence Postgres](https://github.com/SwissBorg/akka-persistence-postgres)
-- [Event Sourcing - Why using a message broker is a bad idea](https://diogojoma.medium.com/event-sourcing-why-using-a-message-broker-is-a-bad-idea-ddc11089c876)
-- [EventStoreDB C# API](https://developers.eventstore.com/clients/dotnet/5.0/streams/)
-- [Versioning in an event sourced system](https://leanpub.com/esversioning/read)
-- [Axon Casino](https://github.com/nklmish/axon-casino)
-- [CQRS and Event Sourcing with Spring & Axon](https://www.youtube.com/watch?v=hkJ29ER1EZU)
-- [SQL Event Store, maybe not](https://nordfjord.io/blog/sql-event-store-maybe-not)
+## License
+
+This project is licensed under the terms of the [MIT license](/LICENSE).

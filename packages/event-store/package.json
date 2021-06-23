@@ -1,0 +1,19 @@
+{
+  "name": "event-store",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  },
+  "dependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.0.1",
+    "pg-connection-string": "^2.5.0",
+    "uuid": "^8.3.2"
+  },
+  "scripts": {
+    "test:setup": "node test/setup.js",
+    "test": "mocha src/**/*.spec.js"
+  }
+}

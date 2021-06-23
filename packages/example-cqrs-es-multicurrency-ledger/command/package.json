@@ -1,0 +1,14 @@
+{
+  "name": "multicurrency-ledger",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0"
+  },
+  "scripts": {
+    "test:setup": ""
+  }
+}
