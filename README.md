@@ -8,18 +8,18 @@ The goal of the library is to:
  - Provide a reusable set of functionality without lock-in that can be used to selectively apply CQRS/Event Sourcing in real world apps where its needed.
  
 
-## 🏷 Features
+# 🏷 Features
 
 - ✅ **Real world** example apps
 - ✅ Projections with **exactly once** processing when using opinionated transactions
 - ✅ Opinionated write retry policy
 - ✅ Opinionated projection library for Postgres to ensure exactly once processing
 
-## ✨ Live Demo
+# ✨ Live Demo
 
 - TODO deploy some examples to Heroku or AWS
 
-## 🙏🏻 Road map
+# 🙏🏻 Road map
 
 - 🔯 Solving combinatorial explosion of message contracts based on the order written on the command side (important)
 - 🔯 Opinionated redis projection library
@@ -35,14 +35,14 @@ The goal of the library is to:
 - 🔯 100% test coverage
 
 
-## 🖥 Installation
+# 🖥 Installation
 
 ```
 $ yarn add @pg-journal/event-store
 $ yarn add @pg-journal/projection-plugin-postgres
 ```
 
-## ✍ Basic Usage
+# ✍ Basic Usage
 
 - **pg-journal** requires an instance of [pg](https://github.com/brianc/node-postgres) in its constructor.
 - `ProjectionStore` is an opinionated projection API for postgres checkpointing if you decide to use postgres for one of your read models.
@@ -51,7 +51,7 @@ $ yarn add @pg-journal/projection-plugin-postgres
 TODO
 ```
 
-## 🧪 Contributing
+# 🧪 Contributing
 
 Pull requests are welcome 😃 Tests/linting rules should pass to be merged into mainline.
 
@@ -65,6 +65,6 @@ Pull requests are welcome 😃 Tests/linting rules should pass to be merged into
 - System tests are using in the `examples` folder to test integration between multiple package versions so atomic changes can be made
 
 
-## License
+# License
 
 This project is licensed under the terms of the [MIT license](/LICENSE).
