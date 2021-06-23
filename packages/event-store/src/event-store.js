@@ -1,4 +1,3 @@
-/* eslint-disable */
 const { PostgresClient } = require('../../postgres-client')
 
 module.exports.EventStore = (options) => {

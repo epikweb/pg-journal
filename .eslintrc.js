@@ -14,5 +14,6 @@ module.exports = {
     'mocha/no-exclusive-tests': 'error',
     'mocha/no-mocha-arrows': 'off',
     'no-async-promise-executor': 'off',
+    'global-require': 'off',
   },
 }

@@ -24,7 +24,6 @@ module.exports = ({ client, schemaName }) => ({
 
           resolve()
         } catch (err) {
-          log.debug(err)
           const { instruction, data } = handleError({ err, attemptsMade })
 
           if (instruction === 'sleepThenRetry') {

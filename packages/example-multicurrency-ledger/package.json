@@ -1,0 +1,18 @@
+{
+  "name": "@pg-journal/example-multicurrency-ledger",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@pg-journal/event-store": "^1.0.0",
+    "@pg-journal/postgres-client": "^1.0.0",
+    "@pg-journal/postgres-projector": "^1.0.0",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0"
+  },
+  "scripts": {
+    "test:setup": "docker-compose up -d && node test/setup.js",
+    "test": "mocha src/**/*.spec.js"
+  }
+}

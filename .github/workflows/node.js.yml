@@ -22,5 +22,44 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: docker-compose up -d
-      - run: cd packages/event-store && yarn
-      - run: cd packages/event-store && yarn test
+      - run: yarn
+      - run: lerna bootstrap
+      - run: cd packages/event-store && yarn test:setup && yarn test
+
+  test-postgres-client:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: docker-compose up -d
+      - run: yarn
+      - run: lerna bootstrap
+      - run: cd packages/postgres-client && yarn test:setup && yarn test
+
+  test-example-multicurrency-ledger:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 12.x, 14.x, 16.x ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: docker-compose up -d
+      - run: yarn
+      - run: lerna bootstrap
+      - run: cd packages/example-multicurrency-ledger && yarn test:setup && yarn test

@@ -1,3 +1,5 @@
+const { log } = require('./logging')
+
 const pipe =
   (...fns) =>
   (x) =>
@@ -36,10 +38,17 @@ const buildReducer = (initialState, handlers) => (events) =>
     return state
   }, initialState)
 
+const asyncDebug = (...args) =>
+  new Promise((resolve) => {
+    log.debug(...args)
+    resolve()
+  })
+
 module.exports = {
   pipe,
   Maybe,
   deepFreeze,
   sleep,
   buildReducer,
+  asyncDebug,
 }

@@ -12,7 +12,7 @@ module.exports.calculateFreeTime = ({
   return pollInterval - duration
 }
 
-module.exports.unmarshalEvents = ({ rows }) =>
+module.exports.unmarshalEvents = (rows) =>
   rows.map((row) => ({
     aggregateId: row.aggregate_id,
     type: row.event_type,

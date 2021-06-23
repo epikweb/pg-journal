@@ -2,16 +2,11 @@ const { marshalEvents } = require('./core')
 const { unmarshalEvents } = require('./core')
 const { calculateNextCheckpoint } = require('./core')
 
-const retrieveEventsSinceLastCheckpoint = ({
-  schemaName,
-  client,
-  checkpoint,
-  batchSize,
-}) =>
+const retrieveEventsSinceLastCheckpoint = ({ client, checkpoint, batchSize }) =>
   client
     .query(
       `
-      select * from ${schemaName}.pg_journal_events where global_index > $1
+      select * from pg_journal_events where global_index > $1
       order by global_index limit $2
   `,
       [checkpoint, batchSize]
@@ -20,13 +15,11 @@ const retrieveEventsSinceLastCheckpoint = ({
 
 module.exports.takeNextEventBatch = async ({
   client,
-  schemaName,
   checkpoint,
   batchSize,
 }) => {
   const events = await retrieveEventsSinceLastCheckpoint({
     client,
-    schemaName,
     checkpoint,
     batchSize,
   })

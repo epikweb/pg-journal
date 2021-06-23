@@ -3,7 +3,7 @@ const { calculateFreeTime } = require('./core')
 const { log } = require('../logging')
 const { sleep } = require('../auxiliary')
 
-module.exports = ({ client, schemaName }) => ({
+module.exports = ({ client }) => ({
   streamFromAll: ({
     batchSize = 500,
     pollInterval = 250,
@@ -16,14 +16,16 @@ module.exports = ({ client, schemaName }) => ({
       log.debug(`Begin poll`)
       const { events, nextCheckpoint } = await takeNextEventBatch({
         client,
-        schemaName,
         checkpoint,
         batchSize,
       })
 
-      log.info(events)
       if (checkpoint !== nextCheckpoint) {
         await new Promise((resolve) => {
+          log.debug(`Emitting`, {
+            checkpoint: nextCheckpoint,
+            events,
+          })
           plugin.emit('checkpointReached', {
             checkpoint: nextCheckpoint,
             events,

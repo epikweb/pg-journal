@@ -1,7 +1,9 @@
+const { EventStore } = require('@pg-journal/event-store')
+const { PostgresClient } = require('@pg-journal/postgres-client')
 const { EventEmitter } = require('events')
-const { PostgresClient } = require('../../postgres-client/src')
-const { log } = require('./logging')
+const { asyncDebug } = require('./auxiliary')
 const { StreamPosition } = require('./constants')
+const { log } = require('./logging')
 
 const findOrRegisterCurrentCheckpoint = ({ client, name }) =>
   client
@@ -14,7 +16,7 @@ const findOrRegisterCurrentCheckpoint = ({ client, name }) =>
       `,
       [StreamPosition.Start, name]
     )
-    .then(({ rows }) => rows[0].checkpoint)
+    .then((rows) => rows[0].checkpoint)
 
 const advanceCheckpoint = async ({ client, name, checkpoint }) =>
   client.query(
@@ -25,11 +27,19 @@ const advanceCheckpoint = async ({ client, name, checkpoint }) =>
     [checkpoint, name]
   )
 
-module.exports.PostgresProjector = ({ eventStore, connectionOptions }) => {
+module.exports.PostgresProjector = ({
+  eventStoreConnectionOptions,
+  connectionOptions,
+}) => {
+  const eventStore = EventStore(eventStoreConnectionOptions)
   const client = PostgresClient(connectionOptions)
+
   return {
     resumeReplication: async ({ name, transformer }) => {
-      const currentCheckpoint = await findOrRegisterCurrentCheckpoint({ name })
+      const currentCheckpoint = await findOrRegisterCurrentCheckpoint({
+        client,
+        name,
+      })
       log.debug(
         `Projection with name: ${name} left off at checkpoint ${currentCheckpoint}. Resuming streaming replication`
       )
@@ -41,19 +51,16 @@ module.exports.PostgresProjector = ({ eventStore, connectionOptions }) => {
       })
 
       plugin.on('checkpointReached', ({ events, checkpoint }) =>
-        client.beginTransaction(() =>
-          new Promise((resolve) => {
-            transformer.emit('eventsReceived', events)
-            transformer.on('eventsProcessed', resolve)
-          })
-            .then(() => advanceCheckpoint({ name, checkpoint }))
-            .then(() =>
-              log.debug(
-                `Projection ${name} checkpoint advanced to ${checkpoint}`
-              )
-            )
-            .then(() => plugin.emit('checkpointAdvanced'))
-            .catch((err) => log.error(`Projection error:`, err))
+        asyncDebug(`Checkpoint reached`, events, checkpoint).then(() =>
+          client.beginTransaction(() =>
+            new Promise((resolve) => {
+              transformer.emit('eventsReceived', events)
+              transformer.on('eventsProcessed', resolve)
+            })
+              .then(() => advanceCheckpoint({ client, name, checkpoint }))
+              .then(() => plugin.emit('checkpointAdvanced'))
+              .catch((err) => log.error(`Projection error:`, err))
+          )
         )
       )
 

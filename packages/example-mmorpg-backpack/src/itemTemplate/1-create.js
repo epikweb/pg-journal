@@ -1,1 +1,1 @@
-module.exports.create = ({ name.}) => {}
+module.exports.create = ({ name }) => {}

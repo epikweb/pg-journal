@@ -65,7 +65,7 @@ const prepareInsertSql = ({
       ),
     (insertStrings) =>
       `
-                      insert into ${schemaName}.pg_journal_events
+                      insert into pg_journal_events
                       (aggregate_id, sequence_number, event_type, event_payload, timestamp)
                       values ${insertStrings}
     `

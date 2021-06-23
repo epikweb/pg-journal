@@ -10,7 +10,7 @@ const unmarshalEvent = (event) => ({
   sequenceNumber: event.sequence_number,
 })
 
-const unmarshalStream = ({ rows }) => {
+const unmarshalStream = (rows) => {
   if (rows.length === 0) {
     return {
       events: [],
@@ -28,15 +28,15 @@ const unmarshalStream = ({ rows }) => {
   }
 }
 
-const retrieveStream = ({ client, schemaName, aggregateId }) =>
+const retrieveStream = ({ client, aggregateId }) =>
   client.query(
     `
-    select * from ${schemaName}.pg_journal_events where aggregate_id = $1 order by sequence_number asc
+    select * from pg_journal_events where aggregate_id = $1 order by sequence_number asc
   `,
     [aggregateId]
   )
 
-module.exports = ({ client, schemaName }) => ({
+module.exports = ({ client }) => ({
   readStreamForwards: async ({ aggregateId }) =>
-    retrieveStream({ client, schemaName, aggregateId }).then(unmarshalStream),
+    retrieveStream({ client, aggregateId }).then(unmarshalStream),
 })

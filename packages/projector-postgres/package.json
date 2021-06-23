@@ -1,5 +1,6 @@
 {
-  "name": "postgres-projector",
+  "name": "@pg-journal/postgres-projector",
+  "private": true,
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,12 +8,10 @@
     "dotenv": "^10.0.0"
   },
   "dependencies": {
+    "@pg-journal/event-store": "^1.0.0",
+    "@pg-journal/postgres-client": "^1.0.0",
     "chai": "^4.3.4",
     "pg-connection-string": "^2.5.0",
     "uuid": "^8.3.2"
-  },
-  "scripts": {
-    "test:arrange": "docker-compose up -d && node test/arrange.js",
-    "test": "mocha src/**/*.spec.js"
   }
 }
