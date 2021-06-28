@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test:setup": "docker-compose up -d && npx wait-on -d 1000 tcp:30000 && node test/setup.js",
-    "test": "mocha src/**/*.spec.js --exit"
+    "test": "mocha {src,test}/**/*.spec.js --exit"
   },
   "peerDependencies": {
     "@pg-journal/postgres-client": "^1.0.0"

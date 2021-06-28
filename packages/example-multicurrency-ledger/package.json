@@ -12,7 +12,7 @@
     "dotenv": "^10.0.0"
   },
   "scripts": {
-    "test:setup": "docker-compose up -d && node test/setup.js",
-    "test": "mocha src/**/*.spec.js --exit"
+    "test:setup": "docker-compose up -d && npx wait-on -d 1000 tcp:35000 tcp:35001 && node test/setup.js",
+    "test": "mocha {src,test}/**/*.spec.js --exit"
   }
 }

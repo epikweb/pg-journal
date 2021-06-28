@@ -11,8 +11,8 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
-    "test:setup": "docker-compose up -d && node test/setup.js",
-    "test": "mocha {src, test}/**/*.spec.js"
+    "test:setup": "docker-compose up -d && npx wait-on -d 1000 tcp:30123 && node test/setup.js",
+    "test": "mocha {src,test}/**/*.spec.js --exit"
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
