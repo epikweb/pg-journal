@@ -15,7 +15,7 @@
     "uuid": "^8.3.2"
   },
   "scripts": {
-    "test:setup": "docker-compose up -d && wait-on -d 1000 tcp:30000 && node test/setup.js",
+    "test:setup": "docker-compose up -d && npx wait-on -d 1000 tcp:30000 && node test/setup.js",
     "test": "mocha src/**/*.spec.js --exit"
   },
   "peerDependencies": {
