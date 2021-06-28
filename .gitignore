@@ -1,3 +1,5 @@
 .idea
 packages/projector-postgres/.env.test
 node_modules
+lerna-debug.log
+**/*.log

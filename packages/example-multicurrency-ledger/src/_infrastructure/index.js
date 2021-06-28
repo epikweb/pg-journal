@@ -19,6 +19,7 @@ const eventStoreClient = PostgresClient({
 const postgresProjectorClient = PostgresClient({
   connectionString: postgresProjectorConnectionString,
   poolSize: 4,
+  loggingEnabled: false,
 })
 
 const eventStore = EventStore({

@@ -11,6 +11,7 @@ module.exports = {
     PostgresClient({
       connectionString,
       ...options,
+      loggingEnabled: false,
     }),
   cleanTables: (client) =>
     client.query(`

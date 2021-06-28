@@ -18,7 +18,6 @@ const waitForReadModelState = (expectedOutput) =>
         })
         .then(resolve)
         .catch((err) => {
-          console.error(err)
           return sleep(2000).then(check)
         })
     })()

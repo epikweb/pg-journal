@@ -47,15 +47,14 @@ describe('Postgres client', () => {
                     { isolationLevel: 'REPEATABLE READ' }
                   )
                   .then(resolve)
-                  .catch((err) => {
-                    console.error(err)
+                  .catch((err) =>
                     // phantom read
-                    return err.code === '40001' &&
-                      err.message ===
-                        'could not serialize access due to concurrent update'
+                    err.code === '40001' &&
+                    err.message ===
+                      'could not serialize access due to concurrent update'
                       ? sleep(Math.random() * 500).then(retry)
                       : Promise.reject(err)
-                  })
+                  )
               })()
             })
         )
@@ -93,7 +92,6 @@ describe('Postgres client', () => {
                 )
                 .then(resolve)
                 .catch((err) => {
-                  console.error(err)
                   const isSerializationAnomaly =
                     err.code === '40001' &&
                     err.message ===
