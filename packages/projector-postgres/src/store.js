@@ -1,13 +1,10 @@
-const { EventStore } = require('@pg-journal/event-store')
-const { PostgresClient } = require('@pg-journal/postgres-client')
 const { EventEmitter } = require('events')
-const { asyncDebug } = require('./auxiliary')
 const { StreamPosition } = require('./constants')
 const { log } = require('./logging')
 
 const findOrRegisterCurrentCheckpoint = ({ client, name }) =>
   client
-    .query(
+    .single(
       `
                 insert into pg_journal_projection_state(checkpoint, name)
                 values($1, $2)
@@ -16,7 +13,7 @@ const findOrRegisterCurrentCheckpoint = ({ client, name }) =>
       `,
       [StreamPosition.Start, name]
     )
-    .then((rows) => rows[0].checkpoint)
+    .then(({ checkpoint }) => parseInt(checkpoint, 10))
 
 const advanceCheckpoint = async ({ client, name, checkpoint }) =>
   client.query(
@@ -27,47 +24,54 @@ const advanceCheckpoint = async ({ client, name, checkpoint }) =>
     [checkpoint, name]
   )
 
-module.exports.PostgresProjector = ({
-  eventStoreConnectionOptions,
-  connectionOptions,
-}) => {
-  const eventStore = EventStore(eventStoreConnectionOptions)
-  const client = PostgresClient(connectionOptions)
+module.exports.PostgresProjector = ({ eventStore, client }) => ({
+  start: ({ name, pollInterval, batchSize }) => {
+    const emitter = new EventEmitter()
 
-  return {
-    resumeReplication: async ({ name, transformer }) => {
-      const currentCheckpoint = await findOrRegisterCurrentCheckpoint({
-        client,
-        name,
-      })
-      log.debug(
-        `Projection with name: ${name} left off at checkpoint ${currentCheckpoint}. Resuming streaming replication`
-      )
-
-      const plugin = new EventEmitter()
-      const { stopStreaming, resumeStreaming } = eventStore.streamFromAll({
-        lastCheckpoint: currentCheckpoint,
-        plugin,
-      })
-
-      plugin.on('checkpointReached', ({ events, checkpoint }) =>
-        asyncDebug(`Checkpoint reached`, events, checkpoint).then(() =>
-          client.beginTransaction(() =>
-            new Promise((resolve) => {
-              transformer.emit('eventsReceived', events)
-              transformer.on('eventsProcessed', resolve)
-            })
-              .then(() => advanceCheckpoint({ client, name, checkpoint }))
-              .then(() => plugin.emit('checkpointAdvanced'))
-              .catch((err) => log.error(`Projection error:`, err))
-          )
+    findOrRegisterCurrentCheckpoint({
+      client,
+      name,
+    })
+      .then((currentCheckpoint) => {
+        log.debug(
+          `Projection with name: ${name} left off at checkpoint ${currentCheckpoint}. Resuming streaming replication`
         )
-      )
 
-      return {
-        stopStreaming,
-        resumeStreaming,
-      }
-    },
-  }
-}
+        const stream = eventStore.streamFromAll({
+          lastCheckpoint: currentCheckpoint,
+          pollInterval,
+          batchSize,
+        })
+
+        stream.on('error', (err) => emitter.emit('error', err))
+        stream.on(
+          'eventsAppeared',
+          ({ events, checkpoint, ack: eventStoreAck }) => {
+            console.log('Received checkpoint', checkpoint)
+            return client.beginTransaction(
+              () =>
+                new Promise((resolve) =>
+                  emitter.emit('eventsReadyForProcessing', {
+                    events,
+                    ack: () => {
+                      console.log(`Start for checkpoint: ${checkpoint}`)
+                      advanceCheckpoint({ client, name, checkpoint })
+                        .then(resolve)
+                        .then(() => {
+                          console.log(`Acking checkpoint: ${checkpoint}`)
+                        })
+                        .then(eventStoreAck)
+                    },
+                  })
+                )
+            )
+          }
+        )
+      })
+      .catch((err) => {
+        emitter.emit('error', err)
+      })
+
+    return emitter
+  },
+})

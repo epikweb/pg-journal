@@ -1,22 +1,20 @@
-const { EventEmitter } = require('events')
-const { postgresProjector } = require('../_infrastructure/postgres-projector')
+const { postgresProjector } = require('../_infrastructure')
 const { find, save } = require('./dao').outstandingBalancesDao
 const { calculateLedgerBalances } = require('./pure')
 
 module.exports.outstandingBalancesProjection = {
-  start: () => {
-    const transformer = new EventEmitter()
-    transformer.on('eventsReceived', (events) =>
-      find()
-        .then(calculateLedgerBalances(events))
-        .then(save)
-        .then(() => transformer.emit('eventsProcessed'))
-        .catch(console.error)
-    )
-
-    return postgresProjector.resumeReplication({
+  start: ({ pollInterval = 5000, batchSize = 5000 }) => {
+    const projection = postgresProjector.start({
       name: 'calculateOutstandingBalances',
-      transformer,
+      pollInterval,
+      batchSize,
+    })
+    projection.on('eventsReadyForProcessing', ({ events, ack }) =>
+      find().then(calculateLedgerBalances(events)).then(save).then(ack)
+    )
+    projection.on('error', (error) => {
+      console.error(`outstandingBalancesProjection error`, error)
+      process.exit(0)
     })
   },
 }

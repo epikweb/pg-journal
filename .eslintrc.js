@@ -15,5 +15,8 @@ module.exports = {
     'mocha/no-mocha-arrows': 'off',
     'no-async-promise-executor': 'off',
     'global-require': 'off',
+    'no-shadow': 'off',
+    'no-await-in-loop': 'off',
+    'import/order': 'off',
   },
 }

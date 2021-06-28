@@ -12,6 +12,10 @@ const Maybe = (value) => ({
 Maybe.Just = (value) => Maybe(value)
 Maybe.Nothing = Maybe(null)
 
+const tap = (msg) => (data) => {
+  console.log(msg, data)
+  return data
+}
 function deepFreeze(object) {
   const propNames = Object.getOwnPropertyNames(object)
 
@@ -38,6 +42,7 @@ const buildReducer = (initialState, handlers) => (events) =>
 
 module.exports = {
   pipe,
+  tap,
   Maybe,
   deepFreeze,
   sleep,

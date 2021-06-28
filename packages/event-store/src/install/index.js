@@ -11,7 +11,7 @@ module.exports.install = async ({ client }) => {
           event_type TEXT NOT NULL,
           event_payload JSONB NOT NULL,
           tags int[],
-          timestamp timestamptz NOT NULL,
+          timestamp timestamptz NOT NULL default now(),
           PRIMARY KEY (aggregate_id, sequence_number)
       );
 

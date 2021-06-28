@@ -1,4 +1,16 @@
-const { client } = require('./config')
+require('dotenv').config({
+  // eslint-disable-next-line global-require
+  path: require('path').join(__dirname, '..', '.env.test'),
+})
+
+const { EventStore } = require('../index')
+const { PostgresClient } = require('@pg-journal/postgres-client')
+
+const connectionString = process.env.EVENT_STORE_CONNECTION_STRING
+
+const client = PostgresClient({
+  connectionString,
+})
 
 module.exports = {
   cleanTables: () =>
@@ -7,4 +19,6 @@ module.exports = {
       truncate table pg_journal_snapshots restart identity;
       truncate table pg_journal_tags restart identity;
     `),
+  constructEventStore: () => EventStore({ client }),
+  client,
 }

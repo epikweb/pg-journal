@@ -1,13 +1,13 @@
+const { constructEventStore } = require('../../test/harness')
 const { assert } = require('chai')
 const { cleanTables } = require('../../test/harness')
-const { connectionString, schemaName } = require('../../test/config')
 const { ExpectedVersion } = require('../constants')
 const { EventStore } = require('../event-store')
 
 describe('appendToStream', () => {
   beforeEach(cleanTables)
   it('should appendToStream 3 events to an aggregate and have the correct expected version returned', async () => {
-    const eventStore = EventStore({ connectionString, schemaName })
+    const eventStore = constructEventStore()
 
     await eventStore.appendToStream({
       aggregateId: 'wallet-123',
@@ -26,7 +26,7 @@ describe('appendToStream', () => {
   }).timeout(15000)
 
   it('should protect concurrent access to a single stream by retrying inserts at a higher sequence number', async () => {
-    const eventStore = EventStore({ connectionString, schemaName })
+    const eventStore = constructEventStore()
 
     await Promise.all(
       [...new Array(5)].map((_) =>

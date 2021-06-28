@@ -4,3 +4,4 @@ module.exports.StreamPosition = {
 module.exports.ExpectedVersion = {
   NoStream: 0,
 }
+module.exports.maximumCommitDelayMs = 250

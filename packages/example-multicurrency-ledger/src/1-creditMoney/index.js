@@ -1,9 +1,13 @@
-const { ExpectedVersion } = require('@pg-journal/event-store')
-const { eventStore } = require('../_infrastructure/event-store')
+const { eventStore } = require('../_infrastructure')
 
-module.exports.creditMoney = ({ beneficiaryName, amount, currency }) =>
-  eventStore.appendToStream({
-    aggregateId: beneficiaryName,
-    events: [{ type: 'Credited', payload: { amount, currency } }],
-    expectedVersion: ExpectedVersion.NoStream,
-  })
+module.exports.creditMoney = ({ beneficiaryName, amount, currency }) => {
+  eventStore
+    .readStreamForwards({ aggregateId: beneficiaryName })
+    .then(({ expectedVersion }) =>
+      eventStore.appendToStream({
+        aggregateId: beneficiaryName,
+        events: [{ type: 'Credited', payload: { amount, currency } }],
+        expectedVersion,
+      })
+    )
+}

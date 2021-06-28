@@ -1,5 +1,5 @@
 module.exports = {
-  install: require('./src/install').install,
-  uninstall: require('./src/uninstall').uninstall,
+  installPostgresProjector: require('./src/install').install,
+  uninstallPostgresProjector: require('./src/uninstall').uninstall,
   PostgresProjector: require('./src/store').PostgresProjector,
 }

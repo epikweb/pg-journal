@@ -43,7 +43,6 @@ const sequenceEvents = ({ events, expectedVersion, attemptsMade }) =>
 
 const prepareInsertSql = ({
   aggregateId,
-  schemaName,
   events,
   expectedVersion,
   attemptsMade,

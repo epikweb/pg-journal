@@ -1,9 +1,9 @@
-const { install } = require('../src/install')
-const { ddlClient, client, schemaName } = require('./config')
+const { installEventStore } = require('../index')
+const { client } = require('./harness')
 
 ;(() =>
-  ddlClient
+  client
     .dropDatabase()
-    .then(ddlClient.createDatabase)
-    .then(() => install({ client, schemaName }))
-    .then(() => Promise.all([ddlClient.close(), client.close()])))()
+    .then(client.createDatabase)
+    .then(() => installEventStore({ client }))
+    .then(client.close))()

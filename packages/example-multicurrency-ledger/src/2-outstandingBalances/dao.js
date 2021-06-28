@@ -1,13 +1,14 @@
-const {
-  postgresProjectorClient,
-} = require('../_infrastructure/postgres-projector')
+const { postgresProjectorClient } = require('../_infrastructure')
 
 const find = () =>
-  postgresProjectorClient
-    .query(`select * from ledgers`)
-    .then((rows) =>
-      rows.map(({ currency, balance }) => ({ currency, balance }))
-    )
+  postgresProjectorClient.query(`select * from ledgers`).then((rows) =>
+    rows
+      .map(({ currency, balance }) => ({
+        currency,
+        balance: parseFloat(balance),
+      }))
+      .sort((a, b) => b.balance - a.balance)
+  )
 
 const save = (ledgers) =>
   Promise.all(

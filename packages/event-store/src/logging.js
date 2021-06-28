@@ -1,5 +1,6 @@
+const enabled = false
 module.exports.log = {
-  info: (...args) => console.info(...args),
-  debug: (...args) => console.log(`[Debug]:`, ...args),
-  error: (...args) => console.error(`[Error]`, ...args),
+  info: (...args) => enabled && console.info(...args),
+  debug: (...args) => enabled && console.log(`[Debug]:`, ...args),
+  error: (...args) => enabled && console.error(`[Error]`, ...args),
 }

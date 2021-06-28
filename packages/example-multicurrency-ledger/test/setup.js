@@ -1,26 +1,19 @@
+const { installPostgresProjector } = require('@pg-journal/postgres-projector')
+const { installEventStore } = require('@pg-journal/event-store')
 const {
-  postgresProjectorDdlClient,
-} = require('../src/_infrastructure/postgres-projector-ddl')
-const {
-  eventStoreDdlClient,
-} = require('../src/_infrastructure/event-store-ddl')
-const {
+  eventStoreClient,
   postgresProjectorClient,
-} = require('../src/_infrastructure/postgres-projector')
-const { eventStoreClient } = require('../src/_infrastructure/event-store')
-const installEventStore = require('@pg-journal/event-store').install
-const installPostgresProjector =
-  require('@pg-journal/postgres-projector').install
+} = require('../src/_infrastructure')
 
 ;(() =>
   Promise.all([
-    eventStoreDdlClient.dropDatabase(),
-    postgresProjectorDdlClient.dropDatabase(),
+    eventStoreClient.dropDatabase(),
+    postgresProjectorClient.dropDatabase(),
   ])
     .then(() =>
       Promise.all([
-        eventStoreDdlClient.createDatabase(),
-        postgresProjectorDdlClient.createDatabase(),
+        eventStoreClient.createDatabase(),
+        postgresProjectorClient.createDatabase(),
       ])
     )
     .then(() =>
@@ -39,10 +32,5 @@ const installPostgresProjector =
       ])
     )
     .then(() =>
-      Promise.all([
-        postgresProjectorClient.close(),
-        postgresProjectorDdlClient.close(),
-        eventStoreClient.close(),
-        eventStoreDdlClient.close(),
-      ])
+      Promise.all([postgresProjectorClient.close(), eventStoreClient.close()])
     ))()

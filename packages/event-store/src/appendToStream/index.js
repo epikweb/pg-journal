@@ -3,7 +3,7 @@ const { prepareInsertSql } = require('./core')
 const { handleError, checkPreconditions } = require('./core')
 const { sleep } = require('../auxiliary')
 
-module.exports = ({ client, schemaName }) => ({
+module.exports = ({ client }) => ({
   appendToStream: ({ aggregateId, events, expectedVersion }) => {
     checkPreconditions({ aggregateId, events, expectedVersion })
 
@@ -13,7 +13,6 @@ module.exports = ({ client, schemaName }) => ({
         try {
           const sql = prepareInsertSql({
             attemptsMade,
-            schemaName,
             events,
             expectedVersion,
             aggregateId,

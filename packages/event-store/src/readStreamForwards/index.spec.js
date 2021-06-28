@@ -1,12 +1,10 @@
 const { assert } = require('chai')
-const { cleanTables } = require('../../test/harness')
-const { connectionString, schemaName } = require('../../test/config')
-const { EventStore } = require('../event-store')
+const { cleanTables, constructEventStore } = require('../../test/harness')
 
 describe('readStreamForwards', () => {
   beforeEach(cleanTables)
   it('should return no events and sequence number readStreamForwards as zero if the aggregate does not yet exist', async () => {
-    const eventStore = EventStore({ connectionString, schemaName })
+    const eventStore = constructEventStore()
 
     const output = await eventStore.readStreamForwards({
       aggregateId: 'wallet-123',

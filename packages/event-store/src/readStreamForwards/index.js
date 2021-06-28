@@ -1,4 +1,4 @@
-const { db } = require('../../../postgres-client/src/regular-client')
+const { db } = require('@pg-journal/postgres-client/src/client')
 const { deepFreeze } = require('../auxiliary')
 const { pipe } = require('../auxiliary')
 

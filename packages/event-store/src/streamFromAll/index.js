@@ -1,55 +1,72 @@
-const { takeNextEventBatch } = require('./take-next-event-batch')
-const { calculateFreeTime } = require('./core')
+const { assert } = require('chai')
+const { EventEmitter } = require('events')
 const { log } = require('../logging')
+const {
+  retrieveEventsSinceLastCheckpoint,
+} = require('./cmd/retrieve-events-since-last-checkpoint')
+const { deliverEventsToConsumer } = require('./cmd/deliver-events-to-consumer')
+const { CoreEvent } = require('./constants')
+const { calculateFreeTime } = require('./core')
 const { sleep } = require('../auxiliary')
+const { poll } = require('./core')
 
 module.exports = ({ client }) => ({
-  streamFromAll: ({
-    batchSize = 500,
-    pollInterval = 250,
-    lastCheckpoint,
-    plugin,
-  }) => {
-    // eslint-disable-next-line no-unused-vars
-    let cancelled = false
-    ;(async function poll(checkpoint, start = Date.now()) {
-      log.debug(`Begin poll`)
-      const { events, nextCheckpoint } = await takeNextEventBatch({
-        client,
-        checkpoint,
-        batchSize,
-      })
+  streamFromAll: ({ batchSize = 500, pollInterval = 250, lastCheckpoint }) => {
+    assert.typeOf(lastCheckpoint, 'number')
 
-      if (checkpoint !== nextCheckpoint) {
-        await new Promise((resolve) => {
-          log.debug(`Emitting`, {
-            checkpoint: nextCheckpoint,
-            events,
-          })
-          plugin.emit('checkpointReached', {
-            checkpoint: nextCheckpoint,
-            events,
-          })
+    const emitter = new EventEmitter()
 
-          plugin.on('checkpointAdvanced', resolve)
+    let running = true
+    ;(async () => {
+      let currentCheckpoint = lastCheckpoint
+
+      while (running) {
+        const start = Date.now()
+        try {
+          await retrieveEventsSinceLastCheckpoint({
+            client,
+            currentCheckpoint,
+            batchSize,
+          })
+            .then((events) =>
+              poll({ events, currentCheckpoint, now: new Date() })
+            )
+            .then(async (coreEvents) => {
+              for (const event of coreEvents) {
+                switch (event.type) {
+                  case CoreEvent.ConsumerDeliveryRequested:
+                    await deliverEventsToConsumer({
+                      emitter,
+                      events: event.payload.events,
+                      nextCheckpoint: event.payload.nextCheckpoint,
+                    })
+                    break
+                  case CoreEvent.CheckpointAdvanced:
+                    currentCheckpoint = event.payload.nextCheckpoint
+                    break
+                  default:
+                    throw new Error(`Invalid event type: ${event.type}`)
+                }
+              }
+            })
+        } catch (err) {
+          log.error(`An error occurred during poll`, err)
+          emitter.emit('error', err)
+        }
+
+        const freeTime = calculateFreeTime({
+          start,
+          pollInterval,
+          now: Date.now(),
         })
+        await sleep(freeTime)
       }
-
-      const freeTime = calculateFreeTime({ start, pollInterval })
-      await sleep(freeTime)
-      log.debug(`End poll`)
-
-      if (!cancelled) {
-        poll(nextCheckpoint)
-      }
-    })(lastCheckpoint)
+    })()
 
     return {
-      stopStreaming: () => {
-        cancelled = true
-      },
-      resumeStreaming: () => {
-        cancelled = false
+      on: emitter.on.bind(emitter),
+      stop: () => {
+        running = false
       },
     }
   },

@@ -13,6 +13,6 @@
   },
   "scripts": {
     "test:setup": "docker-compose up -d && node test/setup.js",
-    "test": "mocha src/**/*.spec.js"
+    "test": "mocha src/**/*.spec.js --exit"
   }
 }
