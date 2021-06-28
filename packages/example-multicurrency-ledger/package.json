@@ -13,6 +13,6 @@
   },
   "scripts": {
     "test:setup": "docker-compose up -d && npx wait-on -d 1000 tcp:35000 tcp:35001 && node test/setup.js",
-    "test": "mocha {src,test}/**/*.spec.js --exit"
+    "test": "npx mocha {src,test}/**/*.spec.js --exit"
   }
 }

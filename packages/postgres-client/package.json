@@ -12,10 +12,9 @@
   },
   "scripts": {
     "test:setup": "docker-compose up -d && npx wait-on -d 1000 tcp:30123 && node test/setup.js",
-    "test": "mocha {src,test}/**/*.spec.js --exit"
+    "test": "npx mocha {src,test}/**/*.spec.js --exit"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0",
-    "mocha": "^9.0.1"
+    "dotenv": "^10.0.0"
   }
 }
