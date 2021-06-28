@@ -10,7 +10,6 @@ module.exports = {
           delete from pg_journal_tags;
 
           select setval('pg_journal_events_global_index_seq', 1, false);
-          select setval('pg_journal_events_global_index_seq', 1, false);
     `),
       postgresProjectorClient.query(`
         delete from ledgers;

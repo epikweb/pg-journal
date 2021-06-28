@@ -1,9 +1,0 @@
-{
-  "name": "benchmarks",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "test:setup": "docker-compose up -d && node postgres-event-store-setup.js"
-  }
-}

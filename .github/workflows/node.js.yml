@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: lerna bootstrap
-      - run: cd packages/event-store && yarn test:setup && yarn test
+      - run: cd packages/event-store && yarn 10k-writes:setup && yarn 10k-writes
 
   test-postgres-client:
 
@@ -41,7 +41,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: lerna bootstrap
-      - run: cd packages/postgres-client && yarn test:setup && yarn test
+      - run: cd packages/postgres-client && yarn 10k-writes:setup && yarn 10k-writes
 
   test-example-multicurrency-ledger:
 
@@ -59,4 +59,4 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: lerna bootstrap
-      - run: cd packages/example-multicurrency-ledger && yarn test:setup && yarn test
+      - run: cd packages/example-multicurrency-ledger && yarn 10k-writes:setup && yarn 10k-writes

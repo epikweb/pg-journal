@@ -18,5 +18,6 @@ module.exports = {
     'no-shadow': 'off',
     'no-await-in-loop': 'off',
     'import/order': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 }

@@ -1,0 +1,15 @@
+{
+  "name": "benchmarks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@pg-journal/event-store": "^1.0.0",
+    "@pg-journal/postgres-client": "^1.0.0",
+    "@eventstore/db-client": "^1.2.2"
+  },
+  "scripts": {
+    "test:setup": "docker-compose up -d && npx wait-on -d 1000 tcp:36000 tcp:36001 && node src/pg-journal-setup.js",
+    "test": "npx mocha src/**/*.spec.js --exit"
+  }
+}
