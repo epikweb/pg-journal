@@ -2,7 +2,7 @@
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/StevePavlin/pg-journal/blob/master/LICENSE)
 
 
-**pg-journal** is an open source CQRS/Event Sourcing library for Node.js/PostgreSQL inspired by the works of Akka and multiple experimental event store attempts in [Immutable Stack](https://github.com/StevePavlin/immutable-stack).
+**pg-journal** is an open source CQRS/Event Sourcing library for Node.js/PostgreSQL heavily inspired by [EventStoreDB](https://eventstore.com), [Akka](https://github.com/SwissBorg/akka-persistence-postgres) and multiple experimental event store attempts when building [Serverless Event Sourcing](https://github.com/immutable-stack/serverless-event-sourcing).
 
 The goal of the library is to:
  - Provide a reusable set of functionality without lock-in that can be used to selectively apply CQRS/Event Sourcing in real world apps where its needed.

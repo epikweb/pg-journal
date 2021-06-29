@@ -50,5 +50,4 @@ describe('appendToStream', () => {
     })
     assert.equal(expectedVersion, 4)
   }).timeout(15000)
-  it('shouldnt retry appending events infinitely to an aggregate (hot aggregates are a known anti-pattern)', async () => {})
 })
