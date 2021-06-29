@@ -20,15 +20,20 @@ The goal of the library is to:
 
 # ✨ Live Demo
 
-- TODO deploy one of the example apps to Heroku or AWS with a simple user interface
+WIP
 
-# 🙏🏻 Road map
+
+# 🙏🏻 Road map (MVP)
 - 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Postgres
-- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Kafka
 - 🔯 Opinionated redis projection library
+- 🔯 Deploy one of the example apps to Heroku or AWS with a simple user interface 
+- 🔯 Delayed commands with at least once delivery ([deadlines](https://docs.axoniq.io/reference-guide/v/3.3/part-ii-domain-logic/deadlines)) 
+
+
+# 🙏🏻 Road map (Future)
+- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Postgres
 - 🔯 Support for table partitioning for [faster btree rebuilds](https://axoniq.io/blog-overview/eventstore)
 - 🔯 Archiving to AWS S3 of old partitions
-- 🔯 Delayed commands with at least once delivery ([deadlines](https://docs.axoniq.io/reference-guide/v/3.3/part-ii-domain-logic/deadlines)) 
 - 🔯 Seamless replication between clusters for blue-green deployments
 
 
@@ -36,6 +41,7 @@ The goal of the library is to:
 # 🖥 Installation
 
 ```
+TODO publish to npm after MVP complete
 $ yarn add @pg-journal/event-store
 $ yarn add @pg-journal/projection-plugin-postgres
 ```
