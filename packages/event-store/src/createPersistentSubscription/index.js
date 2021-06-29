@@ -1,8 +1,3 @@
-const { log } = require('../logging')
-const { prepareInsertSql } = require('./core')
-const { handleError, checkPreconditions } = require('./core')
-const { sleep } = require('../auxiliary')
-
 module.exports = ({ client }) => ({
   createPersistentSubscription: ({ aggregateId, events, expectedVersion }) => {
     checkPreconditions({ aggregateId, events, expectedVersion })
