@@ -10,12 +10,12 @@ The goal of the library is to:
 
 # 🏷 Features
 
-- ✅ **Real world** example apps
-- ✅ Projections with **exactly once** processing when using opinionated transactions
-- ✅ Opinionated write retry policy
-- ✅ Opinionated projection library for Postgres to ensure exactly once processing
 - ✅ Gapless global ordering **without exclusive table locks** on the event journal
-- ✅ Write/streaming benchmarks against popular event stores such as ([EventStoreDB](https://eventstore.com) & [AxonServer](https://axoniq.io/product-overview/axon-server))
+- ✅ In order batch streaming from all streams for projections
+- ✅ Opinionated projection library for Postgres with exactly once processing
+- ✅ Opinionated optimistic concurrency retry policy
+- ✅ Write/streaming benchmarks on different hardware against popular event stores such as ([EventStoreDB](https://eventstore.com) & [AxonServer](https://axoniq.io/product-overview/axon-server))
+- ✅ **Real world** example demo apps
 - ✅ 100% test coverage
 
 # ✨ Live Demo
@@ -25,7 +25,7 @@ WIP
 
 # 🙏🏻 Road map (MVP)
 - 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Postgres
-- 🔯 Opinionated redis projection library
+- 🔯 Opinionated projection library for Redis
 - 🔯 Deploy one of the example apps to Heroku or AWS with a simple user interface 
 - 🔯 Delayed commands with at least once delivery ([deadlines](https://docs.axoniq.io/reference-guide/v/3.3/part-ii-domain-logic/deadlines)) 
 
