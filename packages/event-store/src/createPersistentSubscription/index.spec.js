@@ -1,7 +1,5 @@
 const { constructEventStore } = require('../../test/harness')
-const { assert } = require('chai')
 const { cleanTables } = require('../../test/harness')
-const { ExpectedVersion } = require('../constants')
 
 describe('createPersistentSubscription', () => {
   beforeEach(cleanTables)

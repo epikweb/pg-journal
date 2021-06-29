@@ -1,5 +1,5 @@
 const { sleep } = require('./core')
-const { writeReportForStreamFromAllBenchmark } = require('./harness')
+const { saveReadBenchmark } = require('./harness')
 const { StreamPosition } = require('@pg-journal/event-store')
 const { ExpectedVersion } = require('@pg-journal/event-store')
 const { benchmarkWrites } = require('./harness')
@@ -80,7 +80,7 @@ describe('a benchmark', () => {
       })
     )
 
-    await writeReportForStreamFromAllBenchmark({
+    await saveReadBenchmark({
       eventsRead,
       startTime,
       image: config.image,
@@ -149,7 +149,7 @@ describe('a benchmark', () => {
       })
     )
 
-    await writeReportForStreamFromAllBenchmark({
+    await saveReadBenchmark({
       eventsRead,
       startTime,
       image: config.image,

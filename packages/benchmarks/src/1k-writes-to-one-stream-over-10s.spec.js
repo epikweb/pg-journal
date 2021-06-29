@@ -1,4 +1,4 @@
-const { benchmarkWrites, writeReportForWriteBenchmark } = require('./harness')
+const { benchmarkWrites, saveWriteBenchmark } = require('./harness')
 const { bootstrapEventStoreDb } = require('./bootstrap-eventstoredb')
 const { bootstrapPgJournal } = require('./bootstrap-pg-journal')
 const { jsonEvent, START, FORWARDS } = require('@eventstore/db-client')
@@ -40,7 +40,7 @@ describe('a benchmark', () => {
     )
 
     await pgJournal.close()
-    await writeReportForWriteBenchmark({
+    await saveWriteBenchmark({
       appendTimes,
       startTime,
       eventsWritten,
@@ -108,7 +108,7 @@ describe('a benchmark', () => {
     )
 
     await eventStoreDb.close()
-    await writeReportForWriteBenchmark({
+    await saveWriteBenchmark({
       appendTimes,
       startTime,
       eventsWritten,

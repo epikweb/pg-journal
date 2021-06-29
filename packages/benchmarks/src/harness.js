@@ -68,7 +68,7 @@ module.exports.benchmarkWrites = (
   }))
 }
 
-module.exports.writeReportForWriteBenchmark = ({
+module.exports.saveWriteBenchmark = ({
   appendTimes,
   startTime,
   eventsWritten,
@@ -111,7 +111,7 @@ module.exports.writeReportForWriteBenchmark = ({
       )
   )()
 
-module.exports.writeReportForStreamFromAllBenchmark = ({
+module.exports.saveReadBenchmark = ({
   eventsRead,
   startTime,
   finishTime = Date.now(),
