@@ -23,8 +23,8 @@ The goal of the library is to:
 - TODO deploy one of the example apps to Heroku or AWS with a simple user interface
 
 # 🙏🏻 Road map
-- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with postgres native, no dependencies)
-- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with kafka
+- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Postgres
+- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Kafka
 - 🔯 Opinionated redis projection library
 - 🔯 Support for table partitioning for [faster btree rebuilds](https://axoniq.io/blog-overview/eventstore)
 - 🔯 Archiving to AWS S3 of old partitions

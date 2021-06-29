@@ -1,6 +1,6 @@
 require('dotenv').config({
   // eslint-disable-next-line global-require
-  path: require('path').join(__dirname, '..', '.env.10k-writes'),
+  path: require('path').join(__dirname, '..', '.env.test'),
 })
 
 const { PostgresClient } = require('..')
