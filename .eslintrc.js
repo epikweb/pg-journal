@@ -19,5 +19,6 @@ module.exports = {
     'no-await-in-loop': 'off',
     'import/order': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'no-restricted-syntax': 'off',
   },
 }

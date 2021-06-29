@@ -13,7 +13,7 @@ const findOrRegisterCurrentCheckpoint = ({ client, name }) =>
       `,
       [StreamPosition.Start, name]
     )
-    .then(({ checkpoint }) => parseInt(checkpoint, 10))
+    .then(({ checkpoint }) => BigInt(checkpoint))
 
 const advanceCheckpoint = async ({ client, name, checkpoint }) =>
   client.query(

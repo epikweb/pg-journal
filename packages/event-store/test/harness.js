@@ -17,8 +17,8 @@ module.exports = {
     client.query(`
       truncate table pg_journal_events restart identity;
       truncate table pg_journal_snapshots restart identity;
-      truncate table pg_journal_tags restart identity;
+      truncate table pg_journal_system_projections restart identity;
     `),
-  constructEventStore: () => EventStore({ client }),
+  constructEventStore: (options = {}) => EventStore({ client, ...options }),
   client,
 }

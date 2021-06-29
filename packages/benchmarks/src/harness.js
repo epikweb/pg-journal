@@ -4,6 +4,14 @@ const { bytesToSize } = require('./core')
 const { cpus, totalmem } = require('os')
 const { spawn } = require('child_process')
 
+const dateString = () => {
+  const m = new Date()
+  return `${m.getUTCFullYear()}-${`0${m.getUTCMonth() + 1}`.slice(
+    -2
+  )}-${`0${m.getUTCDate()}`.slice(-2)}-${`0${m.getUTCHours()}`.slice(
+    -2
+  )}-${`0${m.getUTCMinutes()}`.slice(-2)}-${`0${m.getUTCSeconds()}`.slice(-2)}`
+}
 module.exports.runCommand = (cmd, args, env) => {
   console.log(`Running shell cmd`, cmd, args)
   const ls = spawn(cmd, args, {
@@ -91,7 +99,9 @@ module.exports.saveWriteBenchmark = ({
       require('fs').writeFileSync(
         require('path').join(
           __dirname,
-          `${benchmarkName}-${image.replace(/:|\//g, '-')}-${finishTime}.json`
+          '..',
+          'reports',
+          `${benchmarkName}-${image.replace(/:|\//g, '-')}-${dateString()}.json`
         ),
         JSON.stringify(
           {
@@ -130,7 +140,9 @@ module.exports.saveReadBenchmark = ({
       require('fs').writeFileSync(
         require('path').join(
           __dirname,
-          `${benchmarkName}-${image.replace(/:|\//g, '-')}-${finishTime}.json`
+          '..',
+          'reports',
+          `${benchmarkName}-${image.replace(/:|\//g, '-')}-${dateString()}.json`
         ),
         JSON.stringify(
           {
