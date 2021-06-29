@@ -31,7 +31,7 @@ WIP
 
 
 # 🙏🏻 Road map (Future)
-- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Postgres
+- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with Kafka
 - 🔯 Support for table partitioning for [faster btree rebuilds](https://axoniq.io/blog-overview/eventstore)
 - 🔯 Archiving to AWS S3 of old partitions
 - 🔯 Seamless replication between clusters for blue-green deployments
