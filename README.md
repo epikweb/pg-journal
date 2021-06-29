@@ -14,7 +14,7 @@ The goal of the library is to:
 - ✅ Opinionated optimistic concurrency retry policy
 - ✅ Write/streaming benchmarks on different hardware against popular event stores such as ([EventStoreDB](https://eventstore.com) & [AxonServer](https://axoniq.io/product-overview/axon-server))
 - ✅ **Real world** example demo apps
-- ✅ Guaranteed consumer ordering **without exclusive write locks** on the event journal (see: [here](https://nordfjord.io/blog/sql-event-store-maybe-not) for why this is important)
+- ✅ Guaranteed consumer global ordering **without exclusive write locks** on the event journal (see: [here](https://nordfjord.io/blog/sql-event-store-maybe-not) for why this is important)
 - ✅ 100% test coverage
 
 # ✨ Live Demo
