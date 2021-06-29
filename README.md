@@ -61,7 +61,7 @@ Pull requests are welcome 😃 Tests/linting rules should pass to be merged into
 
 - Bootstrap dev dependencies in root - `npx lerna bootstrap`
 - Bootstrap infrastructure, databases and schemas in a package - `yarn test:setup`
-- Run test - `yarn test`
+- Run tests - `yarn test`
 
 
 #### Test suites
