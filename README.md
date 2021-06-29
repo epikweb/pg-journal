@@ -15,7 +15,7 @@ The goal of the library is to:
 - ✅ Opinionated write retry policy
 - ✅ Opinionated projection library for Postgres to ensure exactly once processing
 - ✅ Gapless global ordering **without exclusive table locks** on the event journal
-- ✅ Benchmarks against EventStoreDb
+- ✅ Write/streaming benchmarks against popular event stores such as ([EventStoreDB](https://eventstore.com) & [AxonServer](https://axoniq.io/product-overview/axon-server))
 - ✅ 100% test coverage
 
 # ✨ Live Demo
