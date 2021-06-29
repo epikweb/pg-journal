@@ -14,25 +14,23 @@ The goal of the library is to:
 - ✅ Projections with **exactly once** processing when using opinionated transactions
 - ✅ Opinionated write retry policy
 - ✅ Opinionated projection library for Postgres to ensure exactly once processing
+- ✅ Gapless global ordering **without exclusive table locks** on the event journal
+- ✅ Benchmarks against EventStoreDb
+- ✅ 100% test coverage
 
 # ✨ Live Demo
 
-- TODO deploy some examples to Heroku or AWS
+- TODO deploy one of the example apps to Heroku or AWS with a simple user interface
 
 # 🙏🏻 Road map
-
-- 🔯 Solving combinatorial explosion of message contracts based on the order written on the command side (important)
+- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with postgres native, no dependencies)
+- 🔯 Persistent subscriptions with the [competing consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html) pattern with kafka
 - 🔯 Opinionated redis projection library
-- 🔯 Write model tombstoning
-- 🔯 Read model tombstoning
-- 🔯 Gapless global ordering **without exclusive table locks** on the event journal
-- 🔯 Integration event relay plugin with **at least once** delivery to competing consumers (Redis/Kinesis implementations)
-- 🔯 Support for table partitioning for faster btree rebuilds
+- 🔯 Support for table partitioning for [faster btree rebuilds](https://axoniq.io/blog-overview/eventstore)
 - 🔯 Archiving to AWS S3 of old partitions
-- 🔯 Delayed commands (deadlines)
+- 🔯 Delayed commands with at least once delivery ([deadlines](https://docs.axoniq.io/reference-guide/v/3.3/part-ii-domain-logic/deadlines)) 
 - 🔯 Seamless replication between clusters for blue-green deployments
-- 🔯 Automated performance testing at scale on bigger EC2/RDS instances at scale (1B+ rows)
-- 🔯 100% test coverage
+
 
 
 # 🖥 Installation
@@ -55,8 +53,9 @@ TODO
 
 Pull requests are welcome 😃 Tests/linting rules should pass to be merged into mainline.
 
-- Bootstrap infrastructure, databases and schemas - `yarn test:bootstrap`
-- Run tests across all packages - `npx lerna test`
+- Bootstrap dev dependencies in root - `npx lerna bootstrap`
+- Bootstrap infrastructure, databases and schemas in a package - `yarn test:setup`
+- Run test - `yarn test`
 
 
 #### Test suites
