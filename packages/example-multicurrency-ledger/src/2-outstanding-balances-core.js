@@ -1,7 +1,7 @@
 /* eslint-disable */
 
-const { buildReducer } = require('../auxiliary')
-const { pipe } = require('../auxiliary')
+const { buildReducer } = require('./auxiliary')
+const { pipe } = require('./auxiliary')
 const findOrAddLedger = (ledgers, currency) =>
   pipe(
     () => ledgers.find((l) => l.currency === currency),

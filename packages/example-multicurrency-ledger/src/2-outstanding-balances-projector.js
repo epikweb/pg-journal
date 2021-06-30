@@ -1,6 +1,6 @@
-const { postgresProjector } = require('../_infrastructure')
-const { find, save } = require('./dao').outstandingBalancesDao
-const { calculateLedgerBalances } = require('./pure')
+const { postgresProjector } = require('./infrastructure')
+const { find, save } = require('./2-outstanding-balances-dao').outstandingBalancesDao
+const { calculateLedgerBalances } = require('./2-outstanding-balances-core')
 
 module.exports.outstandingBalancesProjection = {
   start: ({ pollInterval = 5000, batchSize = 5000 }) => {

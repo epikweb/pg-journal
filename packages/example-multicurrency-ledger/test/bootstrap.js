@@ -56,7 +56,7 @@ module.exports.arrangeSut = () =>
     return Promise.all([
       uninstallEventStore({ client: eventStoreClient }),
       uninstallPostgresProjector({ client: postgresProjectorClient }),
-      require('../src/_infrastructure/2021-06-22-initial-migration').down({
+      require('../src/2021-06-22-initial-migration').down({
         client: postgresProjectorClient,
       }),
     ])
@@ -66,7 +66,7 @@ module.exports.arrangeSut = () =>
           installPostgresProjector({
             client: postgresProjectorClient,
           }),
-          require('../src/_infrastructure/2021-06-22-initial-migration').up({
+          require('../src/2021-06-22-initial-migration').up({
             client: postgresProjectorClient,
           }),
         ])

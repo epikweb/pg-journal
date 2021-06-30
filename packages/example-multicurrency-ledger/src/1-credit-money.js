@@ -1,4 +1,4 @@
-const { eventStore } = require('../_infrastructure')
+const { eventStore } = require('./infrastructure')
 
 module.exports.creditMoney = ({ beneficiaryName, amount, currency }) => {
   eventStore

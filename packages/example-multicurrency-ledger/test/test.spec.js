@@ -1,11 +1,11 @@
 /* eslint-disable */
 require('./inject-env')
 
-const { getOutstandingBalances } = require('../src/2-outstandingBalances')
-const { creditMoney } = require('../src/1-creditMoney')
+const { getOutstandingBalances } = require('../src/2-outstanding-balances-query')
+const { creditMoney } = require('../src/1-credit-money')
 const {
   outstandingBalancesProjection,
-} = require('../src/2-outstandingBalances/projector')
+} = require('../src/2-outstanding-balances-projector')
 const { arrangeSut } = require('./bootstrap')
 const { sleep } = require('../src/auxiliary')
 const { assert } = require('chai')

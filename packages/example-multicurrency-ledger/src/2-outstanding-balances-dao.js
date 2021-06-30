@@ -1,4 +1,4 @@
-const { postgresProjectorClient } = require('../_infrastructure')
+const { postgresProjectorClient } = require('./infrastructure')
 
 const find = () =>
   postgresProjectorClient.query(`select * from ledgers`).then((rows) =>
