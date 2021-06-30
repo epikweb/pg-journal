@@ -1,5 +1,5 @@
 {
-  "name": "pg-journal",
+  "name": "js-deluxe",
   "version": "0.1.0",
   "license": "MIT",
   "devDependencies": {
@@ -20,9 +20,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "scripts": {
-    "test:event-store": "docker-compose up -d && node packages/event-store/arrange.js && cd packages/event-store && yarn test"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,eslintrc}": "eslint --fix"

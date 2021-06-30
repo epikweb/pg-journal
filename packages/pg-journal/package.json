@@ -1,5 +1,5 @@
 {
-  "name": "@pg-journal/event-store",
+  "name": "@fact/pg-journal",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",

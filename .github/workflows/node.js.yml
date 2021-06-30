@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test-event-store:
+  test-pg-journal:
 
     runs-on: ubuntu-latest
 
@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: lerna bootstrap
-      - run: cd packages/event-store && yarn test
+      - run: cd packages/pg-journal && yarn test
 
   test-postgres-client:
 
