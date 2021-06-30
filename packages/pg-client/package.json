@@ -1,5 +1,5 @@
 {
-  "name": "@pg-journal/postgres-client",
+  "name": "@fact/pg-client",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",

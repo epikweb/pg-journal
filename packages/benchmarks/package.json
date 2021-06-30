@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@pg-journal/event-store": "^1.0.0",
-    "@pg-journal/postgres-client": "^1.0.0",
+    "@fact/pg-journal": "^1.0.0",
+    "@fact/pg-client": "^1.0.0",
     "@eventstore/db-client": "^1.2.2"
   },
   "scripts": {

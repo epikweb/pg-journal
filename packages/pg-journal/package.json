@@ -5,10 +5,10 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@pg-journal/postgres-client": "^1.0.0"
+    "@fact/pg-client": "^1.0.0"
   },
   "dependencies": {
-    "@pg-journal/postgres-client": "^1.0.0",
+    "@fact/pg-client": "^1.0.0",
     "chai": "^4.3.4",
     "uuid": "^8.3.2"
   },
@@ -16,6 +16,6 @@
     "test": "npx mocha {src,test}/**/*.spec.js --exit --timeout 60000"
   },
   "peerDependencies": {
-    "@pg-journal/postgres-client": "^1.0.0"
+    "@fact/pg-client": "^1.0.0"
   }
 }

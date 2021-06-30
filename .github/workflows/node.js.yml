@@ -22,10 +22,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn
-      - run: lerna bootstrap
-      - run: cd packages/pg-journal && yarn test
+      - run: yarn workspace @fact/pg-journal test
 
-  test-postgres-client:
+  test-pg-client:
 
     runs-on: ubuntu-latest
 
@@ -40,8 +39,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn
-      - run: lerna bootstrap
-      - run: cd packages/postgres-client && yarn test
+      - run: yarn workspace @fact/pg-client test
 
   test-example-multicurrency-ledger:
 
@@ -58,5 +56,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn
-      - run: lerna bootstrap
-      - run: cd packages/example-multicurrency-ledger && yarn test
+      - run: yarn workspace example-multicurrency-ledger test

@@ -1,7 +1,7 @@
 const { ExpectedVersion } = require('../constants')
 const { getStorageTable } = require('./stream-core')
 const { unmarshalEvent } = require('../event/event-core')
-const { db } = require('@pg-journal/postgres-client/src/client')
+const { db } = require('@fact/pg-client/src/client')
 const { deepFreeze } = require('../auxiliary')
 const { pipe } = require('../auxiliary')
 

@@ -1,12 +1,12 @@
 {
-  "name": "@pg-journal/example-multicurrency-ledger",
+  "name": "example-multicurrency-ledger",
   "private": true,
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "@pg-journal/event-store": "^1.0.0",
-    "@pg-journal/postgres-client": "^1.0.0",
-    "@pg-journal/postgres-projector": "^1.0.0",
+    "@fact/pg-journal": "^1.0.0",
+    "@fact/pg-client": "^1.0.0",
+    "@fact/pg-projector": "^1.0.0",
     "chai": "^4.3.4",
     "dotenv": "^10.0.0"
   },

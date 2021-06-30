@@ -1,5 +1,5 @@
 {
-  "name": "@pg-journal/postgres-projector",
+  "name": "@fact/pg-projector",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",
@@ -12,8 +12,8 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "@pg-journal/event-store": "^1.0.0",
-    "@pg-journal/postgres-client": "^1.0.0"
+    "@fact/pg-journal": "^1.0.0",
+    "@fact/pg-client": "^1.0.0"
   },
   "scripts": {
     "test": "npx mocha {src,test}/**/*.spec.js --exit --timeout 60000"

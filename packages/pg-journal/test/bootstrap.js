@@ -1,5 +1,5 @@
 const { installEventStore, EventStore } = require('..')
-const { PostgresClient } = require('@pg-journal/postgres-client')
+const { PostgresClient } = require('@fact/pg-client')
 const { spawn } = require('child_process')
 const { uninstallEventStore } = require('../index')
 

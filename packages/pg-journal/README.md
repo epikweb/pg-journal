@@ -40,8 +40,8 @@ WIP
 
 ```
 TODO publish to npm after MVP complete
-$ yarn add @pg-journal/event-store
-$ yarn add @pg-journal/projection-plugin-postgres
+$ yarn add @fact/pg-journal
+$ yarn add @fact/projection-plugin-postgres
 ```
 
 # ✍ Basic Usage

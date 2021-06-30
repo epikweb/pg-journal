@@ -1,6 +1,6 @@
-const { PostgresProjector } = require('@pg-journal/postgres-projector')
-const { PostgresClient } = require('@pg-journal/postgres-client')
-const { EventStore } = require('@pg-journal/event-store')
+const { PostgresProjector } = require('@fact/pg-projector')
+const { PostgresClient } = require('@fact/pg-client')
+const { EventStore } = require('@fact/pg-journal')
 
 const eventStoreConnectionString = process.env.EVENT_STORE_CONNECTION_STRING
 const postgresProjectorConnectionString =
