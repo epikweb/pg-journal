@@ -39,42 +39,54 @@ const runCommand = (cmd, args, env) => {
 }
 
 module.exports.arrangeSut = () =>
-  runCommand('docker-compose', ['up', '-d']).then(() => {
-    const client = PostgresClient({
-      connectionString: process.env.CONNECTION_STRING,
-      poolSize: 5,
-      loggingEnabled: false,
-    })
-    return client
-      .query(
-        `
-        drop table order_line_items;
-        drop table orders;
-        drop table items;
+  runCommand('docker-compose', ['up', '-d']).then(function retry() {
+    try {
+      const client = PostgresClient({
+        connectionString: process.env.CONNECTION_STRING,
+        poolSize: 5,
+        loggingEnabled: false,
+      })
+      return client
+        .query(
+          `
+                    drop table order_line_items;
+                    drop table orders;
+                    drop table items;
 
-        create table orders(
-            id bigserial not null primary key
-        );
-        create table items(
-            id bigserial not null primary key,
-            name varchar(255) not null,
-            price decimal(10, 2) not null
-        );
-        create table order_line_items(
-            order_id bigint not null references orders(id),
-            item_id bigint not null references items(id),
-                                    
-            primary key(order_id, item_id)
-        );
+                    create table orders
+                    (
+                        id bigserial not null primary key
+                    );
+                    create table items
+                    (
+                        id    bigserial      not null primary key,
+                        name  varchar(255)   not null,
+                        price decimal(10, 2) not null
+                    );
+                    create table order_line_items
+                    (
+                        order_id bigint not null references orders (id),
+                        item_id  bigint not null references items (id),
 
-        insert into items(id, name, price) values(default, 'Sword', 5.0);
-        insert into items(id, name, price) values(default, 'Shield', 25.0);
+                        primary key (order_id, item_id)
+                    );
 
-        insert into orders(id) values(default);
+                    insert into items(id, name, price)
+                    values (default, 'Sword', 5.0);
+                    insert into items(id, name, price)
+                    values (default, 'Shield', 25.0);
 
-        insert into order_line_items(order_id, item_id) values(1, 1);
-        insert into order_line_items(order_id, item_id) values(1, 2);
-    `
-      )
-      .then(() => client)
+                    insert into orders(id)
+                    values (default);
+
+                    insert into order_line_items(order_id, item_id)
+                    values (1, 1);
+                    insert into order_line_items(order_id, item_id)
+                    values (1, 2);
+          `
+        )
+        .then(() => client)
+    } catch (err) {
+      return retry()
+    }
   })

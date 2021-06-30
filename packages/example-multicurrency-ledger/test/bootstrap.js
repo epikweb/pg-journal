@@ -37,37 +37,42 @@ const runCommand = (cmd, args, env) => {
 }
 
 module.exports.arrangeSut = () =>
-  runCommand('docker-compose', ['up', '-d']).then(() => {
-    const eventStoreConnectionString = process.env.EVENT_STORE_CONNECTION_STRING
-    const eventStoreClient = PostgresClient({
-      connectionString: eventStoreConnectionString,
-      poolSize: 5,
-      loggingEnabled: false,
-    })
+  runCommand('docker-compose', ['up', '-d']).then(async function retry() {
+    try {
+      const eventStoreConnectionString =
+        process.env.EVENT_STORE_CONNECTION_STRING
+      const eventStoreClient = PostgresClient({
+        connectionString: eventStoreConnectionString,
+        poolSize: 5,
+        loggingEnabled: false,
+      })
 
-    const postgresProjectorConnectionString =
-      process.env.POSTGRES_PROJECTOR_CONNECTION_STRING
-    const postgresProjectorClient = PostgresClient({
-      connectionString: postgresProjectorConnectionString,
-      poolSize: 5,
-      loggingEnabled: false,
-    })
+      const postgresProjectorConnectionString =
+        process.env.POSTGRES_PROJECTOR_CONNECTION_STRING
+      const postgresProjectorClient = PostgresClient({
+        connectionString: postgresProjectorConnectionString,
+        poolSize: 5,
+        loggingEnabled: false,
+      })
 
-    return Promise.all([
-      uninstallEventStore({ client: eventStoreClient }),
-      uninstallPostgresProjector({ client: postgresProjectorClient }),
-      require('../src/_infrastructure/2021-06-22-initial-migration').down({
-        client: postgresProjectorClient,
-      }),
-    ]).then(() =>
-      Promise.all([
-        installEventStore({ client: eventStoreClient }),
-        installPostgresProjector({
+      return Promise.all([
+        uninstallEventStore({ client: eventStoreClient }),
+        uninstallPostgresProjector({ client: postgresProjectorClient }),
+        require('../src/_infrastructure/2021-06-22-initial-migration').down({
           client: postgresProjectorClient,
         }),
-        require('../src/_infrastructure/2021-06-22-initial-migration').up({
-          client: postgresProjectorClient,
-        }),
-      ])
-    )
+      ]).then(() =>
+        Promise.all([
+          installEventStore({ client: eventStoreClient }),
+          installPostgresProjector({
+            client: postgresProjectorClient,
+          }),
+          require('../src/_infrastructure/2021-06-22-initial-migration').up({
+            client: postgresProjectorClient,
+          }),
+        ])
+      )
+    } catch (err) {
+      return retry()
+    }
   })
