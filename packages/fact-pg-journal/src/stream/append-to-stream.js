@@ -29,7 +29,7 @@ module.exports = ({ client, isSystemStream = false }) => ({
 
     const storageTable = getStorageTable(isSystemStream)
     return (
-      expectedVersion
+      expectedVersion !== undefined
         ? Promise.resolve(expectedVersion)
         : getExpectedVersion({ client, streamId, storageTable })
     ).then(
@@ -52,6 +52,7 @@ module.exports = ({ client, isSystemStream = false }) => ({
               .catch((err) =>
                 Promise.resolve(handleError({ err, attemptsMade }))
                   .then((event) => {
+                    console.log('got err', event)
                     switch (event.type) {
                       case AppendToStreamEvent.ConcurrencyViolationDetected:
                         return sleep(event.payload.backoffDelay).then(() =>

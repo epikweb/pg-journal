@@ -101,7 +101,7 @@ module.exports.saveWriteBenchmark = ({
           __dirname,
           '..',
           'reports',
-          `${benchmarkName}-${image.replace(/:|\//g, '-')}-${dateString()}.json`
+          `${benchmarkName}-${image.replace(/:|\//g, '-')}.json`
         ),
         JSON.stringify(
           {
@@ -142,7 +142,7 @@ module.exports.saveReadBenchmark = ({
           __dirname,
           '..',
           'reports',
-          `${benchmarkName}-${image.replace(/:|\//g, '-')}-${dateString()}.json`
+          `${benchmarkName}-${image.replace(/:|\//g, '-')}.json`
         ),
         JSON.stringify(
           {

@@ -1,10 +1,11 @@
+const { ExpectedVersion } = require('fact-pg-journal')
 const { bootstrapPgJournal } = require('../src/bootstrap-pgjournal')
 const { sleep } = require('../src/core')
 const { saveReadBenchmark } = require('../src/harness')
 const { StreamPosition } = require('fact-pg-journal')
 const { benchmarkWrites } = require('../src/harness')
 const { bootstrapEventStoreDb } = require('../src/bootstrap-eventstoredb')
-const { jsonEvent, START } = require('@eventstore/db-client')
+const { jsonEvent, START, NO_STREAM } = require('@eventstore/db-client')
 
 const benchmarkName = require('path')
   .basename(__filename)
@@ -18,7 +19,7 @@ describe('a benchmark', () => {
   it('should benchmark pgjournal', async () => {
     const config = {
       image: 'library/postgres:10.12',
-      poolSize: 4,
+      poolSize: 8,
     }
     const pgJournal = await bootstrapPgJournal(config)
 
@@ -34,29 +35,11 @@ describe('a benchmark', () => {
               type: 'Credited',
               payload: { amount: Math.random(), currency: 'CAD' },
             },
-          ]
+          ],
+          expectedVersion: ExpectedVersion.NoStream
         }).catch(console.error),
       writeOptions
-    ).then(() => {
-      const writeAckStart = Date.now()
-      return new Promise((resolve) =>
-        (function retry() {
-          pgJournal.client
-            .single(`select count(*) from pg_journal_events`)
-            .then(({ count }) => {
-              // Why is this a thing? TODO fix
-              console.log('Acked writes', count)
-
-              if (parseInt(count, 10) === eventsToWrite) {
-                writeAckDelay = Date.now() - writeAckStart
-                return resolve()
-              }
-
-              return sleep(500).then(retry)
-            })
-        })()
-      )
-    })
+    )
     console.log(`Events written, beginning stream from all`)
 
     const stream = await pgJournal.subscribeToAll({
@@ -85,8 +68,7 @@ describe('a benchmark', () => {
       image: config.image,
       benchmarkName,
       metadata: {
-        poolSize: config.poolSize,
-        writeAckDelay,
+        poolSize: config.poolSize
       },
     })
 
@@ -124,7 +106,9 @@ describe('a benchmark', () => {
             type: 'Credited',
             data: { amount: Math.random(), currency: 'CAD' },
           }),
-        ]),
+        ], {
+          expectedRevision: NO_STREAM
+        }),
       writeOptions
     )
 

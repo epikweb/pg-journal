@@ -109,15 +109,18 @@ describe('gap detection', () => {
       {
         globalIndex: 1n,
         timestamp: '2021-06-26T12:41:52.053Z',
-      },
-      {
-        globalIndex: 2n,
-        timestamp: '2021-06-26T12:41:52.071Z',
-      },
-      {
-        globalIndex: 3n,
-        timestamp: '2021-06-26T12:41:52.144Z',
-      },
+      }
     ])
+  })
+  it('should be faster with ints', () => {
+    const benchmark = (cb) => {
+      const start = Date.now()
+      cb()
+      return Date.now() - start
+    }
+    const res1 = benchmark(() => [...new Array(50000)].map(_ => 555n + 555n))
+    const res2 = benchmark(() => [...new Array(50000)].map(_ => 555 + 555))
+
+    console.log(res1, res2)
   })
 })

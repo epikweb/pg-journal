@@ -1,6 +1,4 @@
-const { tap } = require('../auxiliary')
 const { maximumCommitDelayMs } = require('../constants')
-const { pipe } = require('../auxiliary')
 
 const computeMillisUntilSafe = (now, timestamp) =>
   Math.min(
@@ -9,71 +7,10 @@ const computeMillisUntilSafe = (now, timestamp) =>
     maximumCommitDelayMs
   )
 
-const Event = {
-  GapDetected: 'GapDetected',
-  EventDetected: 'EventDetected',
-}
+module.exports.findVisibleEvents = ({ currentCheckpoint, events, now }) => {
+  const benchmark = (name) => data => 
+    // log.info(name, `+${Date.now() - new Date(now).getTime()}ms`)
+     data
 
-module.exports.findVisibleEvents = ({ currentCheckpoint, events, now }) =>
-  pipe(
-    () => events[events.length - 1].globalIndex,
-    (lastGlobalIndex) => lastGlobalIndex - currentCheckpoint,
-    (expectedNumberOfEvents) =>
-      [...new Array(parseInt(expectedNumberOfEvents, 10))].map(
-        (_, index) => BigInt(index) + currentCheckpoint + BigInt(1)
-      ),
-    (expectedEvents) =>
-      expectedEvents.map((globalIndex) =>
-        pipe(
-          () => ({
-            exactMatch: events.find((e) => e.globalIndex === globalIndex),
-            nextHighestMatch: events.find((e) => e.globalIndex > globalIndex),
-            globalIndex,
-          }),
-          ({ exactMatch, nextHighestMatch, globalIndex }) =>
-            exactMatch
-              ? {
-                  type: Event.EventDetected,
-                  payload: {
-                    event: exactMatch,
-                    millisUntilSafe: computeMillisUntilSafe(
-                      now,
-                      exactMatch.timestamp
-                    ),
-                  },
-                }
-              : {
-                  type: Event.GapDetected,
-                  payload: {
-                    globalIndex,
-                    millisUntilSafe: computeMillisUntilSafe(
-                      now,
-                      nextHighestMatch.timestamp
-                    ),
-                  },
-                }
-        )()
-      ),
-    (events) => ({
-      safeEvents: events.filter(
-        (e) => e.type === Event.EventDetected && e.payload.millisUntilSafe <= 0
-      ),
-      unsafeEvents: events.filter(
-        (e) => e.type === Event.EventDetected && e.payload.millisUntilSafe > 0
-      ),
-      unsafeGaps: events.filter(
-        (e) => e.type === Event.GapDetected && e.payload.millisUntilSafe > 0
-      ),
-    }),
-    ({ safeEvents, unsafeEvents, unsafeGaps }) =>
-      unsafeGaps.length > 0
-        ? [
-            ...safeEvents,
-            ...unsafeEvents.filter(
-              (e) =>
-                e.payload.event.globalIndex < unsafeGaps[0].payload.globalIndex
-            ),
-          ]
-        : [...safeEvents, ...unsafeEvents],
-    (visibleEvents) => visibleEvents.map((e) => e.payload.event)
-  )()
+  return events.filter(e => computeMillisUntilSafe(now, e.timestamp) < 0)
+}

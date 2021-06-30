@@ -24,7 +24,6 @@ module.exports.poll = ({ events, currentCheckpoint, now }) => {
         events,
         now,
       }),
-    tap('visibleEvents'),
     (visibleEvents) =>
       visibleEvents.length > 0
         ? [

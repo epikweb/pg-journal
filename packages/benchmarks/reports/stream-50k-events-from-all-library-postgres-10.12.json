@@ -1,13 +1,12 @@
 {
     "eventsRead": 50000,
-    "elapsedMs": 1212,
-    "readsPerSecond": "41254.1254",
+    "elapsedMs": 1091,
+    "readsPerSecond": "45829.5142",
     "benchmarkName": "stream-50k-events-from-all",
     "cpu": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
     "cpuCores": 8,
     "ram": "32 GB",
     "metadata": {
-        "poolSize": 4,
-        "writeAckDelay": 11806
+        "poolSize": 8
     }
 }

@@ -35,11 +35,6 @@ const retrieveEventsSinceLastCheckpoint = ({
     )
     .then((rows) => rows.map(unmarshalEvent))
 
-const tap = (value) => (data) => {
-  console.log(value, data)
-  return data
-}
-
 module.exports = ({ client }) => ({
   subscribeToAll: ({ batchSize = 500, pollInterval = 250, lastCheckpoint }) => {
     assert.typeOf(lastCheckpoint, 'bigint')
@@ -59,7 +54,12 @@ module.exports = ({ client }) => ({
             batchSize,
           })
             .then((events) =>
-              poll({ events, currentCheckpoint, now: new Date() })
+            {
+              const pollStart = Date.now()
+              const res = poll({ events, currentCheckpoint, now: new Date() })
+              log.debug(`Poll took ${Date.now() - pollStart}ms`)
+              return res
+            }
             )
             .then(async (coreEvents) => {
               for (const event of coreEvents) {

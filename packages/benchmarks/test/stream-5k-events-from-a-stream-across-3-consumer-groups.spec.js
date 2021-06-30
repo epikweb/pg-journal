@@ -205,6 +205,6 @@ describe('a benchmark', () => {
       },
     })
 
-    // await eventStoreDb.close()
+    await eventStoreDb.close()
   })
 })

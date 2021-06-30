@@ -24,8 +24,10 @@ describe('a benchmark', () => {
       () =>
         pgJournal
           .readStreamForwards({ streamId: 'holo' })
-          .then(({ expectedVersion }) =>
-            pgJournal.appendToStream({
+          .then(({ expectedVersion }) => {
+
+            console.log('got expected version', expectedVersion)
+            return pgJournal.appendToStream({
               streamId: 'holo',
               events: [
                 {
@@ -35,6 +37,7 @@ describe('a benchmark', () => {
               ],
               expectedVersion,
             })
+            }
           ),
       options
     )

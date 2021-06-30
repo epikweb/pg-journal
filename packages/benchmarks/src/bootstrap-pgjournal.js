@@ -3,7 +3,7 @@ const { PostgresClient } = require('fact-pg-client')
 const { runCommand } = require('./harness')
 const waitOn = require('wait-on')
 
-const port = 36000
+const port = 36555
 const containerName = 'pg_journal'
 module.exports.bootstrapPgJournal = ({ poolSize, image, dockerFlags = [] }) =>
   runCommand('docker', ['stop', containerName])
