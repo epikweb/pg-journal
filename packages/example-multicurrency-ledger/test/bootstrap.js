@@ -38,30 +38,29 @@ const runCommand = (cmd, args, env) => {
 
 module.exports.arrangeSut = () =>
   runCommand('docker-compose', ['up', '-d']).then(async function retry() {
-    try {
-      const eventStoreConnectionString =
-        process.env.EVENT_STORE_CONNECTION_STRING
-      const eventStoreClient = PostgresClient({
-        connectionString: eventStoreConnectionString,
-        poolSize: 5,
-        loggingEnabled: false,
-      })
+    const eventStoreConnectionString = process.env.EVENT_STORE_CONNECTION_STRING
+    const eventStoreClient = PostgresClient({
+      connectionString: eventStoreConnectionString,
+      poolSize: 5,
+      loggingEnabled: false,
+    })
 
-      const postgresProjectorConnectionString =
-        process.env.POSTGRES_PROJECTOR_CONNECTION_STRING
-      const postgresProjectorClient = PostgresClient({
-        connectionString: postgresProjectorConnectionString,
-        poolSize: 5,
-        loggingEnabled: false,
-      })
+    const postgresProjectorConnectionString =
+      process.env.POSTGRES_PROJECTOR_CONNECTION_STRING
+    const postgresProjectorClient = PostgresClient({
+      connectionString: postgresProjectorConnectionString,
+      poolSize: 5,
+      loggingEnabled: false,
+    })
 
-      return Promise.all([
-        uninstallEventStore({ client: eventStoreClient }),
-        uninstallPostgresProjector({ client: postgresProjectorClient }),
-        require('../src/_infrastructure/2021-06-22-initial-migration').down({
-          client: postgresProjectorClient,
-        }),
-      ]).then(() =>
+    return Promise.all([
+      uninstallEventStore({ client: eventStoreClient }),
+      uninstallPostgresProjector({ client: postgresProjectorClient }),
+      require('../src/_infrastructure/2021-06-22-initial-migration').down({
+        client: postgresProjectorClient,
+      }),
+    ])
+      .then(() =>
         Promise.all([
           installEventStore({ client: eventStoreClient }),
           installPostgresProjector({
@@ -72,7 +71,8 @@ module.exports.arrangeSut = () =>
           }),
         ])
       )
-    } catch (err) {
-      return retry()
-    }
+      .catch((err) => {
+        console.error(err)
+        return new Promise((resolve) => setTimeout(resolve, 500)).then(retry)
+      })
   })

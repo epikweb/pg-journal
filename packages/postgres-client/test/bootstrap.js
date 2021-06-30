@@ -5,7 +5,6 @@ require('dotenv').config({
 
 const { PostgresClient } = require('..')
 const { spawn } = require('child_process')
-const waitOn = require('wait-on')
 
 const runCommand = (cmd, args, env) => {
   console.log(`Running shell cmd`, cmd, args)
@@ -40,18 +39,17 @@ const runCommand = (cmd, args, env) => {
 
 module.exports.arrangeSut = () =>
   runCommand('docker-compose', ['up', '-d']).then(function retry() {
-    try {
-      const client = PostgresClient({
-        connectionString: process.env.CONNECTION_STRING,
-        poolSize: 5,
-        loggingEnabled: false,
-      })
-      return client
-        .query(
-          `
-                    drop table order_line_items;
-                    drop table orders;
-                    drop table items;
+    const client = PostgresClient({
+      connectionString: process.env.CONNECTION_STRING,
+      poolSize: 5,
+      loggingEnabled: false,
+    })
+    return client
+      .query(
+        `
+                    drop table if exists order_line_items;
+                    drop table if exists orders;
+                    drop table if exists items;
 
                     create table orders
                     (
@@ -84,9 +82,10 @@ module.exports.arrangeSut = () =>
                     insert into order_line_items(order_id, item_id)
                     values (1, 2);
           `
-        )
-        .then(() => client)
-    } catch (err) {
-      return retry()
-    }
+      )
+      .then(() => client)
+      .catch((err) => {
+        console.error(err)
+        return new Promise((resolve) => setTimeout(resolve, 500)).then(retry)
+      })
   })

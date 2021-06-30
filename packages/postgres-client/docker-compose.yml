@@ -6,7 +6,7 @@ services:
       - "postgres"
     image: library/postgres:10.12
     environment:
-      - POSTGRES_DB=postgres_client_test
+      - POSTGRES_DB=database
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     ports:
