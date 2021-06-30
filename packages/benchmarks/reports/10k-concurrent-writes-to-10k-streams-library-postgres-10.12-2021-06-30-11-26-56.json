@@ -1,0 +1,14 @@
+{
+    "elapsedMs": 10910,
+    "averageAppendLatency": 6896.60028315243,
+    "writesPerSecond": "847.2000",
+    "benchmarkName": "10k-concurrent-writes-to-10k-streams",
+    "eventsWritten": 8472,
+    "cpu": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
+    "cpuCores": 8,
+    "ram": "32 GB",
+    "metadata": {
+        "image": "library/postgres:10.12",
+        "poolSize": 4
+    }
+}

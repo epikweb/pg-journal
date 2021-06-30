@@ -1,7 +1,7 @@
+const { bootstrapPgJournal } = require('../src/bootstrap-pgjournal')
 const { ExpectedVersion } = require('fact-pg-journal')
 const { benchmarkWrites, saveWriteBenchmark } = require('../src/harness')
 const { bootstrapEventStoreDb } = require('../src/bootstrap-eventstoredb')
-const { bootstrapPgJournal } = require('fact-pg-journal/test/bootstrap')
 const { jsonEvent, START, FORWARDS } = require('@eventstore/db-client')
 
 const benchmarkName = require('path')

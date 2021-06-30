@@ -1,5 +1,6 @@
 {
   "name": "benchmarks",
+  "private": true,
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -9,6 +10,6 @@
     "@eventstore/db-client": "^1.2.2"
   },
   "scripts": {
-    "test": "npx mocha {src,test}/**/*.spec.js --exit --timeout 60000"
+    "test": "npx mocha {src,test}/**/*.spec.js --exit --timeout 120000"
   }
 }

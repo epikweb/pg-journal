@@ -1,10 +1,9 @@
+const { bootstrapPgJournal } = require('../src/bootstrap-pgjournal')
 const { sleep } = require('../src/core')
 const { saveReadBenchmark } = require('../src/harness')
 const { StreamPosition } = require('fact-pg-journal')
-const { ExpectedVersion } = require('fact-pg-journal')
 const { benchmarkWrites } = require('../src/harness')
 const { bootstrapEventStoreDb } = require('../src/bootstrap-eventstoredb')
-const { bootstrapPgJournal } = require('fact-pg-journal/test/bootstrap')
 const { jsonEvent, START } = require('@eventstore/db-client')
 
 const benchmarkName = require('path')
@@ -23,7 +22,7 @@ describe('a benchmark', () => {
     }
     const pgJournal = await bootstrapPgJournal(config)
 
-    console.log(`Starting benchmark for fact-pg-journal`)
+    console.log(`Writing events into fact-pg-journal`)
 
     let writeAckDelay
     await benchmarkWrites(
@@ -35,9 +34,8 @@ describe('a benchmark', () => {
               type: 'Credited',
               payload: { amount: Math.random(), currency: 'CAD' },
             },
-          ],
-          expectedVersion: ExpectedVersion.NoStream,
-        }),
+          ]
+        }).catch(console.error),
       writeOptions
     ).then(() => {
       const writeAckStart = Date.now()
@@ -46,6 +44,7 @@ describe('a benchmark', () => {
           pgJournal.client
             .single(`select count(*) from pg_journal_events`)
             .then(({ count }) => {
+              // Why is this a thing? TODO fix
               console.log('Acked writes', count)
 
               if (parseInt(count, 10) === eventsToWrite) {
@@ -60,7 +59,7 @@ describe('a benchmark', () => {
     })
     console.log(`Events written, beginning stream from all`)
 
-    const stream = await pgJournal.streamFromAll({
+    const stream = await pgJournal.subscribeToAll({
       lastCheckpoint: StreamPosition.Start,
 
       // 10k seems to be fair based on https://developers.eventstore.com/clients/dotnet/5.0/subscriptions/catchup-subscriptions.html#subscribing-to-a-stream
@@ -117,7 +116,7 @@ describe('a benchmark', () => {
     }
     const eventStoreDb = await bootstrapEventStoreDb(config)
 
-    console.log(`Starting benchmark for eventstoredb`)
+    console.log(`Writing events into eventstoredb`)
     await benchmarkWrites(
       () =>
         eventStoreDb.appendToStream(Math.random().toString(), [

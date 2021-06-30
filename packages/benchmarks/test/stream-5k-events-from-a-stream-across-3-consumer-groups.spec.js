@@ -1,3 +1,4 @@
+const { bootstrapPgJournal } = require('../src/bootstrap-pgjournal')
 const { pipe } = require('../src/core')
 const { sleep } = require('../src/core')
 const { saveReadBenchmark } = require('../src/harness')
@@ -5,7 +6,6 @@ const { StreamPosition } = require('fact-pg-journal')
 const { ExpectedVersion } = require('fact-pg-journal')
 const { benchmarkWrites } = require('../src/harness')
 const { bootstrapEventStoreDb } = require('../src/bootstrap-eventstoredb')
-const { bootstrapPgJournal } = require('fact-pg-journal/test/bootstrap')
 const {
   jsonEvent,
   START,
