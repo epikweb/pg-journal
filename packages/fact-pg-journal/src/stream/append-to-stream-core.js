@@ -1,3 +1,4 @@
+const { maximumCommitDelayMs } = require('../constants')
 const { assert } = require('chai')
 const { ExpectedVersion } = require('../constants')
 const { pipe } = require('../auxiliary')
@@ -78,6 +79,7 @@ const prepareInsertSql = ({
       ),
     (insertStrings) =>
       `
+        set statement_timeout = \'${maximumCommitDelayMs}\';
                       insert into ${storageTable}
                       (stream_id, sequence_number, event_type, event_payload, timestamp)
                       values ${insertStrings}

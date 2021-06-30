@@ -1,9 +1,9 @@
 {
-    "elapsedMs": 10596,
-    "averageAppendLatency": 49.13607594936709,
-    "writesPerSecond": "63.2000",
+    "elapsedMs": 10545,
+    "averageAppendLatency": 32.32776349614396,
+    "writesPerSecond": "77.8000",
     "benchmarkName": "1k-writes-to-one-stream-over-10s",
-    "eventsWritten": 632,
+    "eventsWritten": 778,
     "cpu": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
     "cpuCores": 8,
     "ram": "32 GB",

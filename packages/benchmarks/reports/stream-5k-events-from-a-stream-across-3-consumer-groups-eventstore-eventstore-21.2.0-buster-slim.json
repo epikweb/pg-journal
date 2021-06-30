@@ -1,7 +1,7 @@
 {
     "eventsRead": 15000,
-    "elapsedMs": 6613,
-    "readsPerSecond": "2268.2595",
+    "elapsedMs": 3948,
+    "readsPerSecond": "3799.3921",
     "benchmarkName": "stream-5k-events-from-a-stream-across-3-consumer-groups",
     "cpu": "Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz",
     "cpuCores": 8,

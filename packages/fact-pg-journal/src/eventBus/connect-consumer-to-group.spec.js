@@ -2,8 +2,9 @@ const { pipe } = require('../auxiliary')
 const { arrangeEventStore } = require('../../test/bootstrap')
 const { ExpectedVersion } = require('../constants')
 
-describe('subscribe', () => {
-  it.skip('should persistentSubscription 3 consumer groups to a stream, receiving a load balanced # of events based on the # of processing nodes', async () => {
+describe('connect consumer to group', () => {
+  it.skip('should register 3 consumer groups to a stream and connect consumers. ' +
+    'Each consumer should receive a load balanced # of events based on the # of processing nodes on a round robin basis', async () => {
     const eventStore = await arrangeEventStore()
 
     const eventsToWrite = 1000

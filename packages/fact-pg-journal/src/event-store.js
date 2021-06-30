@@ -12,12 +12,14 @@ module.exports.EventStore = ({ client, enabledSystemProjections = [] }) => {
   return {
     ...require('./stream/append-to-stream')({ client }),
     ...require('./stream/read-stream-forwards')({ client }),
-    ...require('./persistentSubscription/connect-to-persistent-subscription')({
+    ...require('./eventBus/register-consumer-group')({
       client,
     }),
-
+    ...require('./eventBus/connect-consumer-to-group')({
+      client,
+    }),
     ...require('./transientSubscription/subscribe-to-all')({ client }),
-    ...require('./transientSubscription/subscribe-to-system-stream')({
+    ...require('./systemProjection/subscribe-to-system-stream')({
       client,
     }),
   }

@@ -26,7 +26,7 @@ const waitForReadModelState = (expectedOutput) =>
   )
 
 describe('multicurrency ledger example', () => {
-  it('should eventually see consistent outstanding balances after crediting 10k monetary transactions', async () => {
+  it('should eventually see consistent outstanding balances after crediting money in different currencies', async () => {
     await arrangeSut()
 
     const waitThenCredit =

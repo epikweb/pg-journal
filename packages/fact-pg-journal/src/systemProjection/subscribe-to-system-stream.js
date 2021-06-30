@@ -3,10 +3,10 @@ const { unmarshalEvent } = require('../event/event-core')
 const { assert } = require('chai')
 const { EventEmitter } = require('events')
 const { log } = require('../logging')
-const { CoreEvent } = require('./constants')
-const { calculateFreeTime } = require('./streaming-core')
+const { CoreEvent } = require('../transientSubscription/constants')
+const { calculateFreeTime } = require('../transientSubscription/streaming-core')
 const { sleep } = require('../auxiliary')
-const { poll } = require('./streaming-core')
+const { poll } = require('../transientSubscription/streaming-core')
 
 const deliverEventsToConsumer = ({ emitter, events, nextCheckpoint }) =>
   new Promise((resolve) => {
