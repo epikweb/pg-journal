@@ -3,7 +3,7 @@
 
 
 
-**Fact** is an open source CQRS/Event Sourcing framework for Node.js heavily inspired by [EventStoreDB](https://eventstore.com), [Akka](https://github.com/SwissBorg/akka-persistence-postgres) and [Axon](https://axoniq.io/).
+**Fact** is an open source CQRS/Event Sourcing framework for Node.js heavily inspired by [EventStoreDB](https://github.com/EventStore/EventStore), [Akka](https://github.com/akka/akka) and [Axon](https://github.com/AxonFramework/AxonFramework).
 
 The goal of the framework is to:
  - Provide a set of libraries without lock-in that can be used to selectively apply CQRS/Event Sourcing in real world apps where its needed.
