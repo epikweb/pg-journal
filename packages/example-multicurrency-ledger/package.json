@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "@fact/pg-journal": "^1.0.0",
-    "@fact/pg-client": "^1.0.0",
-    "@fact/pg-projector": "^1.0.0",
+    "fact-pg-journal": "^1.0.0",
+    "fact-pg-client": "^1.0.0",
+    "fact-pg-projector": "^1.0.0",
     "chai": "^4.3.4",
     "dotenv": "^10.0.0"
   },

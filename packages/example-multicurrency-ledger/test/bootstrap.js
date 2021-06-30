@@ -1,9 +1,9 @@
-const { PostgresClient } = require('@fact/pg-client')
+const { PostgresClient } = require('fact-pg-client')
 const { spawn } = require('child_process')
-const { uninstallPostgresProjector } = require('@fact/pg-projector')
-const { uninstallEventStore } = require('@fact/pg-journal')
-const { installPostgresProjector } = require('@fact/pg-projector')
-const { installEventStore } = require('@fact/pg-journal')
+const { uninstallPostgresProjector } = require('fact-pg-projector')
+const { uninstallEventStore } = require('fact-pg-journal')
+const { installPostgresProjector } = require('fact-pg-projector')
+const { installEventStore } = require('fact-pg-journal')
 
 const runCommand = (cmd, args, env) => {
   console.log(`Running shell cmd`, cmd, args)

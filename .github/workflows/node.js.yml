@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn
-      - run: yarn workspace @fact/pg-journal test
+      - run: yarn workspace fact-pg-journal test
 
   test-pg-client:
 
@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn
-      - run: yarn workspace @fact/pg-client test
+      - run: yarn workspace fact-pg-client test
 
   test-example-multicurrency-ledger:
 

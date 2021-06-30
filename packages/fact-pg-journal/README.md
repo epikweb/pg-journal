@@ -1,8 +1,8 @@
-# 🐘 pg-journal
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/StevePavlin/pg-journal/blob/master/LICENSE)
+# 🐘 fact-pg-journal
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/StevePavlin/fact-pg-journal/blob/master/LICENSE)
 
 
-**pg-journal** is an open source CQRS/Event Sourcing library for Node.js/PostgreSQL heavily inspired by [EventStoreDB](https://eventstore.com), [Akka](https://github.com/SwissBorg/akka-persistence-postgres) and multiple experimental event store attempts when building [Serverless Event Sourcing](https://github.com/immutable-stack/serverless-event-sourcing).
+**fact-pg-journal** is an open source CQRS/Event Sourcing library for Node.js/PostgreSQL heavily inspired by [EventStoreDB](https://eventstore.com), [Akka](https://github.com/SwissBorg/akka-persistence-postgres) and multiple experimental event store attempts when building [Serverless Event Sourcing](https://github.com/immutable-stack/serverless-event-sourcing).
 
 The goal of the library is to:
  - Provide a reusable set of functionality without lock-in that can be used to selectively apply CQRS/Event Sourcing in real world apps where its needed.
@@ -40,13 +40,13 @@ WIP
 
 ```
 TODO publish to npm after MVP complete
-$ yarn add @fact/pg-journal
+$ yarn add fact-pg-journal
 $ yarn add @fact/projection-plugin-postgres
 ```
 
 # ✍ Basic Usage
 
-- **pg-journal** requires an instance of [pg](https://github.com/brianc/node-postgres) in its constructor.
+- **fact-pg-journal** requires an instance of [pg](https://github.com/brianc/node-postgres) in its constructor.
 - `ProjectionStore` is an opinionated projection API for postgres checkpointing if you decide to use postgres for one of your read models.
 
 ```js

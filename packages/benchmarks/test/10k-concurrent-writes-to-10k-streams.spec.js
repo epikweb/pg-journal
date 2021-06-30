@@ -1,7 +1,7 @@
-const { ExpectedVersion } = require('@fact/pg-journal')
+const { ExpectedVersion } = require('fact-pg-journal')
 const { benchmarkWrites, saveWriteBenchmark } = require('../src/harness')
 const { bootstrapEventStoreDb } = require('../src/bootstrap-eventstoredb')
-const { bootstrapPgJournal } = require('@fact/pg-journal/test/bootstrap')
+const { bootstrapPgJournal } = require('fact-pg-journal/test/bootstrap')
 const { jsonEvent, START, FORWARDS } = require('@eventstore/db-client')
 
 const benchmarkName = require('path')
@@ -20,7 +20,7 @@ describe('a benchmark', () => {
     }
     const pgJournal = await bootstrapPgJournal(config)
 
-    console.log(`Starting benchmark for pg-journal`)
+    console.log(`Starting benchmark for fact-pg-journal`)
     const { appendTimes, startTime, eventsWritten } = await benchmarkWrites(
       () =>
         pgJournal.appendToStream({

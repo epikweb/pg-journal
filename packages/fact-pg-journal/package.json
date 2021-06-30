@@ -1,19 +1,21 @@
 {
-  "name": "@fact/pg-client",
+  "name": "fact-pg-journal",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "devDependencies": {
+    "fact-pg-client": "^1.0.0"
+  },
   "dependencies": {
+    "fact-pg-client": "^1.0.0",
     "chai": "^4.3.4",
-    "pg": "^8.6.0",
-    "pg-connection-string": "^2.5.0",
     "uuid": "^8.3.2"
   },
   "scripts": {
     "test": "npx mocha {src,test}/**/*.spec.js --exit --timeout 60000"
   },
-  "devDependencies": {
-    "dotenv": "^10.0.0"
+  "peerDependencies": {
+    "fact-pg-client": "^1.0.0"
   }
 }
