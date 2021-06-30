@@ -35,20 +35,24 @@ const runCommand = (cmd, args, env) => {
 }
 
 module.exports.arrangeEventStore = (options = {}) =>
-  runCommand('docker-compose', ['up', '-d']).then(async () => {
-    const client = PostgresClient({
-      connectionString: `postgres://user:password@localhost:34921/database`,
-      poolSize: 5,
-      loggingEnabled: false,
-    })
-    await uninstallEventStore({ client }).then(() =>
-      installEventStore({ client })
-    )
+  runCommand('docker-compose', ['up', '-d']).then(async function retry() {
+    try {
+      const client = PostgresClient({
+        connectionString: `postgres://user:password@localhost:34921/database`,
+        poolSize: 5,
+        loggingEnabled: false,
+      })
+      await uninstallEventStore({ client }).then(() =>
+        installEventStore({ client })
+      )
 
-    const eventStore = EventStore({ client, ...options })
+      const eventStore = EventStore({ client, ...options })
 
-    return {
-      ...eventStore,
-      client,
+      return {
+        ...eventStore,
+        client,
+      }
+    } catch (err) {
+      return retry()
     }
   })
