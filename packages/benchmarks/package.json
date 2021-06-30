@@ -9,6 +9,6 @@
     "@eventstore/db-client": "^1.2.2"
   },
   "scripts": {
-    "test": "npx mocha test/**/*.spec.js --exit"
+    "test": "npx mocha {src,test}/**/*.spec.js --exit --timeout 60000"
   }
 }

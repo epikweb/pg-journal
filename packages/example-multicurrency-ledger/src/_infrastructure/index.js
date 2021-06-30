@@ -1,8 +1,3 @@
-require('dotenv').config({
-  // eslint-disable-next-line global-require
-  path: require('path').join(__dirname, '..', '..', '.env.test'),
-})
-
 const { PostgresProjector } = require('@pg-journal/postgres-projector')
 const { PostgresClient } = require('@pg-journal/postgres-client')
 const { EventStore } = require('@pg-journal/event-store')
@@ -14,7 +9,7 @@ const postgresProjectorConnectionString =
 const eventStoreClient = PostgresClient({
   connectionString: eventStoreConnectionString,
   poolSize: 4,
-  loggingEnabled: false,
+  loggingEnabled: true,
 })
 const postgresProjectorClient = PostgresClient({
   connectionString: postgresProjectorConnectionString,

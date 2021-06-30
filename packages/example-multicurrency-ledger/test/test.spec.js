@@ -1,11 +1,12 @@
 /* eslint-disable */
+require('./inject-env')
 
 const { getOutstandingBalances } = require('../src/2-outstandingBalances')
 const { creditMoney } = require('../src/1-creditMoney')
 const {
   outstandingBalancesProjection,
 } = require('../src/2-outstandingBalances/projector')
-const { resetTables } = require('./harness')
+const { arrangeSut } = require('./bootstrap')
 const { sleep } = require('../src/auxiliary')
 const { assert } = require('chai')
 
@@ -14,6 +15,7 @@ const waitForReadModelState = (expectedOutput) =>
     (function check() {
       getOutstandingBalances()
         .then((output) => {
+          console.log(output, expectedOutput)
           assert.deepEqual(output, expectedOutput)
         })
         .then(resolve)
@@ -24,9 +26,9 @@ const waitForReadModelState = (expectedOutput) =>
   )
 
 describe('multicurrency ledger example', () => {
-  beforeEach(resetTables)
+  it('should eventually see consistent outstanding balances after crediting 10k monetary transactions', async () => {
+    await arrangeSut()
 
-  it('should eventually see consistent outstanding balances after crediting 10k monetary transactions', () => {
     const waitThenCredit =
       (delay, times) => (beneficiaryName, amount, currency) =>
         [...new Array(times)].map(
@@ -59,5 +61,5 @@ describe('multicurrency ledger example', () => {
         { currency: 'PLN', balance: 5 },
       ]),
     ])
-  }).timeout(60000)
+  })
 })

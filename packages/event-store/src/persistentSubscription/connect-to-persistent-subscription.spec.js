@@ -1,13 +1,10 @@
 const { pipe } = require('../auxiliary')
-const { constructEventStore } = require('../../test/harness')
-const { assert } = require('chai')
-const { cleanTables } = require('../../test/harness')
+const { arrangeEventStore } = require('../../test/bootstrap')
 const { ExpectedVersion } = require('../constants')
 
 describe('subscribe', () => {
-  beforeEach(cleanTables)
-  it('should persistentSubscription 3 consumer groups to a stream, receiving a load balanced # of events based on the # of processing nodes', async () => {
-    const eventStore = constructEventStore()
+  it.skip('should persistentSubscription 3 consumer groups to a stream, receiving a load balanced # of events based on the # of processing nodes', async () => {
+    const eventStore = await arrangeEventStore()
 
     const eventsToWrite = 1000
     const consumerGroups = [
@@ -92,5 +89,5 @@ describe('subscribe', () => {
         )
       )
     )
-  }).timeout(15000)
+  })
 })

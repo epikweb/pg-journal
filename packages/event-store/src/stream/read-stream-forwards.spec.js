@@ -1,17 +1,16 @@
 const { assert } = require('chai')
-const { cleanTables, constructEventStore } = require('../../test/harness')
+const { arrangeEventStore } = require('../../test/bootstrap')
 
 describe('readStreamForwards', () => {
-  beforeEach(cleanTables)
   it('should return no events and sequence number readStreamForwards as zero if the aggregate does not yet exist', async () => {
-    const eventStore = constructEventStore()
+    const eventStore = await arrangeEventStore()
 
     const output = await eventStore.readStreamForwards({
       streamId: 'wallet-123',
     })
     assert.deepEqual(output, {
-      expectedVersion: 0,
+      expectedVersion: 0n,
       events: [],
     })
-  }).timeout(15000)
+  })
 })

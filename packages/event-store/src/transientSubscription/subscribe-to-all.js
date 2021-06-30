@@ -28,7 +28,7 @@ const retrieveEventsSinceLastCheckpoint = ({
   client
     .query(
       `
-      select stream_id, event_type, event_payload, global_index, timestamp from pg_journal_events where global_index > $1
+      select stream_id, event_type, event_payload, global_index, sequence_number, timestamp from pg_journal_events where global_index > $1
       order by global_index limit $2
   `,
       [currentCheckpoint, batchSize]
@@ -39,6 +39,7 @@ const tap = (value) => (data) => {
   console.log(value, data)
   return data
 }
+
 module.exports = ({ client }) => ({
   subscribeToAll: ({ batchSize = 500, pollInterval = 250, lastCheckpoint }) => {
     assert.typeOf(lastCheckpoint, 'bigint')
@@ -57,7 +58,6 @@ module.exports = ({ client }) => ({
             currentCheckpoint,
             batchSize,
           })
-            .then(tap('events'))
             .then((events) =>
               poll({ events, currentCheckpoint, now: new Date() })
             )

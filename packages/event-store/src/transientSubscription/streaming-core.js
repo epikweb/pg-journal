@@ -1,3 +1,4 @@
+const { tap } = require('../auxiliary')
 const { marshalEvent } = require('../event/event-core')
 const { pipe } = require('../auxiliary')
 const { findVisibleEvents } = require('./gap-detection')
@@ -23,13 +24,14 @@ module.exports.poll = ({ events, currentCheckpoint, now }) => {
         events,
         now,
       }),
+    tap('visibleEvents'),
     (visibleEvents) =>
       visibleEvents.length > 0
         ? [
             {
               type: CoreEvent.ConsumerDeliveryRequested,
               payload: {
-                events: events.map(marshalEvent),
+                events: visibleEvents.map(marshalEvent),
                 nextCheckpoint: calculateNextCheckpoint(visibleEvents),
               },
             },

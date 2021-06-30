@@ -1,21 +1,13 @@
+const { arrangeEventStore } = require('../../test/bootstrap')
 const { EventEmitter } = require('events')
 const { assert } = require('chai')
 const { log } = require('../logging')
 const { StreamPosition } = require('../constants')
-const { ExpectedVersion } = require('../constants')
 const { sleep } = require('../auxiliary')
-const {
-  cleanTables,
-  constructEventStore,
-  client,
-} = require('../../test/harness')
 
 describe('subscribe to all', () => {
-  beforeEach(cleanTables)
-
   it('should receive some events when they are appended with a 1s delay', async () => {
-    const eventStore = constructEventStore()
-
+    const eventStore = await arrangeEventStore()
     const streamId = '123'
 
     const appendEventWithDelay = (delay, eventData) =>
@@ -62,7 +54,7 @@ describe('subscribe to all', () => {
                 payload: {
                   hi: true,
                 },
-                globalIndex: 1n,
+                sequenceNumber: 0n,
               },
               {
                 streamId,
@@ -70,7 +62,7 @@ describe('subscribe to all', () => {
                 payload: {
                   hi: true,
                 },
-                globalIndex: 2n,
+                sequenceNumber: 1n,
               },
             ])
             stream.stop()
@@ -81,14 +73,14 @@ describe('subscribe to all', () => {
         })
       }),
     ])
-  }).timeout(5000)
+  })
 
-  it('should be aware of gaps in the global sequence and still deliver events in order', () => {
-    const eventStore = constructEventStore()
+  it('should be aware of gaps in the global sequence and still deliver events in order', async () => {
+    const eventStore = await arrangeEventStore()
 
     const append = ({ streamId, beginDelay, commitDelay, payload }) =>
       sleep(beginDelay).then(() =>
-        client.query(
+        eventStore.client.query(
           `
             INSERT INTO public.pg_journal_events (global_index, sequence_number, stream_id, event_type, event_payload) VALUES (default, 0, '${streamId}', 'Credited', '${JSON.stringify(
             payload
@@ -97,23 +89,6 @@ describe('subscribe to all', () => {
           `
         )
       )
-
-    // timeline:
-    // +0 ms -> sora assigned global_index = 1
-    // +5 ms -> sora commits with global_index = 1
-    // +100 ms -> kairi assigned global_index = 2
-    // +200 ms -> riku assigned global_index = 3
-    // +205 ms -> riku commits with global_index = 3
-    // +300 ms -> projection polls
-    // - sees global_index = 3
-    // - realizes there is a gap
-    // - we have a guarantee that the client holding the id in the gap will commit in 1s
-    // - we track the last compliant id
-    // - we advance only when its safe to do so
-    // +1000ms -> kairi commits with global_index = 2
-    // +1100ms -> projection polls
-    // - sees kairi
-    // - gives ids 2 + 3 to the plugin
 
     return Promise.all([
       append({
@@ -161,19 +136,19 @@ describe('subscribe to all', () => {
                 streamId: 'sora',
                 type: 'Credited',
                 payload: { amount: 5, currency: 'CAD' },
-                globalIndex: 1n,
+                sequenceNumber: 0n,
               },
               {
                 streamId: 'kairi',
                 type: 'Credited',
                 payload: { amount: 5, currency: 'CAD' },
-                globalIndex: 2n,
+                sequenceNumber: 0n,
               },
               {
                 streamId: 'riku',
                 type: 'Credited',
                 payload: { amount: 5, currency: 'CAD' },
-                globalIndex: 3n,
+                sequenceNumber: 0n,
               },
             ])
             stream.stop()
@@ -184,5 +159,5 @@ describe('subscribe to all', () => {
         })
       }),
     ])
-  }).timeout(3000)
+  })
 })

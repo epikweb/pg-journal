@@ -7,7 +7,7 @@ const checkPreconditions = ({ streamId, expectedVersion, events }) => {
 
   if (expectedVersion) {
     assert.typeOf(expectedVersion, 'bigint')
-    assert.isAtLeast(expectedVersion, ExpectedVersion.NoStream)
+    assert(expectedVersion >= ExpectedVersion.NoStream)
   }
 
   assert.isArray(events)
@@ -21,23 +21,31 @@ const checkPreconditions = ({ streamId, expectedVersion, events }) => {
 }
 
 const PostgresUniqueConstraintErrorCode = '23505'
+
+const Event = {
+  FailedToCorrectConcurrencyViolation: 'FailedToCorrectConcurrencyViolation',
+  ConcurrencyViolationDetected: 'ConcurrencyViolationDetected',
+  UnknownErrorReceived: 'UnknownErrorReceived',
+}
 const handleError = ({ err, attemptsMade, random = Math.random() }) => {
   if (err.code === PostgresUniqueConstraintErrorCode) {
     if (attemptsMade === 10) {
       return {
-        instruction: 'throw',
-        data: { msg: `Concurrency violation after ${attemptsMade} attempts` },
+        type: Event.FailedToCorrectConcurrencyViolation,
+        payload: {
+          msg: `Concurrency violation after ${attemptsMade} attempts`,
+        },
       }
     }
 
     const backoffDelay = 2 ** attemptsMade * random
     return {
-      instruction: 'sleepThenRetry',
-      data: { nextAttempt: attemptsMade + 1, backoffDelay },
+      type: Event.ConcurrencyViolationDetected,
+      payload: { nextAttempt: attemptsMade + 1, backoffDelay },
     }
   }
 
-  return { instruction: 'throw', data: { msg: err.name } }
+  return { type: Event.UnknownErrorReceived, payload: { msg: err.name } }
 }
 
 const sequenceEvents = ({ events, expectedVersion, attemptsMade }) =>
@@ -51,6 +59,7 @@ const prepareInsertSql = ({
   events,
   expectedVersion,
   attemptsMade,
+  storageTable,
   now,
 }) =>
   pipe(
@@ -69,7 +78,7 @@ const prepareInsertSql = ({
       ),
     (insertStrings) =>
       `
-                      insert into pg_journal_events
+                      insert into ${storageTable}
                       (stream_id, sequence_number, event_type, event_payload, timestamp)
                       values ${insertStrings}
     `
@@ -79,4 +88,5 @@ module.exports = {
   checkPreconditions,
   handleError,
   prepareInsertSql,
+  AppendToStreamEvent: Event,
 }

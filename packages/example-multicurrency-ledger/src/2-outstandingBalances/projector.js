@@ -9,8 +9,13 @@ module.exports.outstandingBalancesProjection = {
       pollInterval,
       batchSize,
     })
+
     projection.on('eventsReadyForProcessing', ({ events, ack }) =>
-      find().then(calculateLedgerBalances(events)).then(save).then(ack)
+      find()
+        .then(calculateLedgerBalances(events))
+        .then(save)
+        .then(ack)
+        .catch(console.error)
     )
     projection.on('error', (error) => {
       console.error(`outstandingBalancesProjection error`, error)

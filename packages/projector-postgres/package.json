@@ -14,5 +14,8 @@
   "peerDependencies": {
     "@pg-journal/event-store": "^1.0.0",
     "@pg-journal/postgres-client": "^1.0.0"
+  },
+  "scripts": {
+    "test": "npx mocha {src,test}/**/*.spec.js --exit --timeout 60000"
   }
 }

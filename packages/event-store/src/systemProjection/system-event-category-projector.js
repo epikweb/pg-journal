@@ -1,9 +1,7 @@
 const { SystemProjection } = require('../constants')
 
-const prefix = '$category'
 const marshalCategoryStreamId = (event) =>
-  `${prefix}-${event.streamId.split('-')[0]}`
-const isNotACategoryStream = (event) => !event.streamId.includes(prefix)
+  `event-category-${event.streamId.split('-')[0]}`
 
 module.exports = ({ client }) => ({
   startEventCategoryProjector: () =>
@@ -13,8 +11,11 @@ module.exports = ({ client }) => ({
       })
       .on('eventsReadyForProcessing', ({ events, ack }) =>
         Promise.all(
-          events.filter(isNotACategoryStream).map((e) =>
-            require('../stream/append-to-stream')({ client }).appendToStream({
+          events.map((e) =>
+            require('../stream/append-to-stream')({
+              client,
+              isSystemStream: true,
+            }).appendToStream({
               streamId: marshalCategoryStreamId(e),
               events: [e],
             })

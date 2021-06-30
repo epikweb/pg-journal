@@ -1,6 +1,6 @@
 const { benchmarkWrites, saveWriteBenchmark } = require('../src/harness')
 const { bootstrapEventStoreDb } = require('../src/bootstrap-eventstoredb')
-const { bootstrapPgJournal } = require('../src/bootstrap-pg-journal')
+const { bootstrapPgJournal } = require('@pg-journal/event-store/test/bootstrap')
 const { jsonEvent, START, FORWARDS } = require('@eventstore/db-client')
 
 const benchmarkName = require('path')
@@ -50,7 +50,7 @@ describe('a benchmark', () => {
         ...config,
       },
     })
-  }).timeout(60000)
+  })
   it('should benchmark eventstoredb', async () => {
     const config = {
       image: 'eventstore/eventstore:21.2.0-buster-slim',
@@ -118,5 +118,5 @@ describe('a benchmark', () => {
         flags: config.dockerFlags.filter((val) => val !== '-e'),
       },
     })
-  }).timeout(60000)
+  })
 })

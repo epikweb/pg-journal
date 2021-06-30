@@ -9,5 +9,5 @@ module.exports.up = ({ client }) =>
 
 module.exports.down = ({ client }) =>
   client.query(`
-      drop table ledgers
+      drop table if exists ledgers
   `)

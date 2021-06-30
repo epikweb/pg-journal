@@ -37,7 +37,7 @@ module.exports.PostgresProjector = ({ eventStore, client }) => ({
           `Projection with name: ${name} left off at checkpoint ${currentCheckpoint}. Resuming streaming replication`
         )
 
-        const stream = eventStore.streamFromAll({
+        const stream = eventStore.subscribeToAll({
           lastCheckpoint: currentCheckpoint,
           pollInterval,
           batchSize,
@@ -47,21 +47,19 @@ module.exports.PostgresProjector = ({ eventStore, client }) => ({
         stream.on(
           'eventsAppeared',
           ({ events, checkpoint, ack: eventStoreAck }) => {
-            console.log('Received checkpoint', checkpoint)
+            console.log(`Received events at checkpoint`, checkpoint, events)
             return client.beginTransaction(
               () =>
                 new Promise((resolve) =>
                   emitter.emit('eventsReadyForProcessing', {
                     events,
-                    ack: () => {
-                      console.log(`Start for checkpoint: ${checkpoint}`)
+                    ack: () =>
                       advanceCheckpoint({ client, name, checkpoint })
                         .then(resolve)
                         .then(() => {
-                          console.log(`Acking checkpoint: ${checkpoint}`)
+                          console.log(`Acking checkpoint`, checkpoint)
                         })
-                        .then(eventStoreAck)
-                    },
+                        .then(eventStoreAck),
                   })
                 )
             )

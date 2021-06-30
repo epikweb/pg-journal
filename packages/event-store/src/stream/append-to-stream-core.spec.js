@@ -21,8 +21,8 @@ describe('append to stream core', () => {
           }),
         (res) =>
           assert.deepEqual(res, {
-            instruction: 'sleepThenRetry',
-            data: {
+            type: 'ConcurrencyViolationDetected',
+            payload: {
               nextAttempt: index + 1,
               backoffDelay: 2 ** index * 0.36,
             },
@@ -34,8 +34,8 @@ describe('append to stream core', () => {
       () => handleError({ err: genError('23505'), attemptsMade: 10 }),
       (res) =>
         assert.deepEqual(res, {
-          instruction: 'throw',
-          data: { msg: 'Concurrency violation after 10 attempts' },
+          type: 'FailedToCorrectConcurrencyViolation',
+          payload: { msg: 'Concurrency violation after 10 attempts' },
         })
     )())
   it('should throw if code not 23505', () =>
@@ -43,8 +43,8 @@ describe('append to stream core', () => {
       () => handleError({ err: { name: 'RandomError' }, attemptsMade: 1 }),
       (res) =>
         assert.deepEqual(res, {
-          instruction: 'throw',
-          data: { msg: 'RandomError' },
+          type: 'UnknownErrorReceived',
+          payload: { msg: 'RandomError' },
         })
     )())
 })

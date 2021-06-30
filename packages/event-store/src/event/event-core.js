@@ -11,13 +11,19 @@ module.exports.unmarshalEvent = ({
   streamId: stream_id,
   type: event_type,
   payload: event_payload,
-  sequenceNumber: sequence_number,
+  sequenceNumber: BigInt(sequence_number),
   globalIndex: BigInt(global_index),
   timestamp,
 })
 
-module.exports.marshalEvent = ({ streamId, type, payload, globalIndex }) => ({
+module.exports.marshalEvent = ({
   streamId,
   type,
   payload,
+  sequenceNumber,
+}) => ({
+  streamId,
+  type,
+  payload,
+  sequenceNumber,
 })

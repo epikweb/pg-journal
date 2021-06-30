@@ -14,7 +14,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     ports:
-      - "35000:5432"
+      - "35231:5432"
 
   postgres_projections:
     command:
@@ -28,4 +28,4 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     ports:
-      - "35001:5432"
+      - "35232:5432"

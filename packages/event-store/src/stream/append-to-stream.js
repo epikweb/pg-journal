@@ -1,15 +1,20 @@
 /*  eslint-disable camelcase */
 
+const { getStorageTable } = require('./stream-core')
 const { ExpectedVersion } = require('../constants')
-const { prepareInsertSql } = require('./append-to-stream-core')
-const { handleError, checkPreconditions } = require('./append-to-stream-core')
+const {
+  prepareInsertSql,
+  AppendToStreamEvent,
+  handleError,
+  checkPreconditions,
+} = require('./append-to-stream-core')
 const { sleep } = require('../auxiliary')
 
-const getExpectedVersion = (client, streamId) =>
+const getExpectedVersion = ({ client, streamId, storageTable }) =>
   client
     .single(
       `select max(sequence_number) as expected_version 
-            from pg_journal_events where stream_id = $1`,
+            from ${storageTable} where stream_id = $1`,
       [streamId]
     )
     .then(({ expected_version }) =>
@@ -18,45 +23,49 @@ const getExpectedVersion = (client, streamId) =>
         : ExpectedVersion.NoStream
     )
 
-module.exports = ({ client }) => ({
+module.exports = ({ client, isSystemStream = false }) => ({
   appendToStream: async ({ streamId, events, expectedVersion }) => {
     checkPreconditions({ streamId, events, expectedVersion })
 
+    const storageTable = getStorageTable(isSystemStream)
     return (
       expectedVersion
         ? Promise.resolve(expectedVersion)
-        : getExpectedVersion(client, streamId)
+        : getExpectedVersion({ client, streamId, storageTable })
     ).then(
       (expectedVersion) =>
         new Promise((resolve, reject) =>
           // eslint-disable-next-line consistent-return
           (async function run(attemptsMade = 0) {
-            try {
-              const sql = prepareInsertSql({
-                attemptsMade,
-                events,
-                expectedVersion,
-                streamId,
-                now: new Date(),
-              })
+            const sql = prepareInsertSql({
+              attemptsMade,
+              events,
+              expectedVersion,
+              streamId,
+              storageTable,
+              now: new Date(),
+            })
 
-              await client.query(sql)
+            return client
+              .query(sql)
+              .then(resolve)
+              .catch((err) =>
+                Promise.resolve(handleError({ err, attemptsMade }))
+                  .then((event) => {
+                    switch (event.type) {
+                      case AppendToStreamEvent.ConcurrencyViolationDetected:
+                        return sleep(event.payload.backoffDelay).then(() =>
+                          run(event.payload.nextAttempt)
+                        )
 
-              resolve()
-            } catch (err) {
-              console.error(err)
-              const { instruction, data } = handleError({
-                err,
-                attemptsMade,
-              })
-
-              if (instruction === 'sleepThenRetry') {
-                await sleep(data.backoffDelay)
-                return run(attemptsMade + 1)
-              }
-
-              reject(new Error(data.msg))
-            }
+                      case AppendToStreamEvent.FailedToCorrectConcurrencyViolation:
+                      case AppendToStreamEvent.UnknownErrorReceived:
+                      default:
+                        return reject(new Error(event.payload.msg))
+                    }
+                  })
+                  .catch(reject)
+              )
           })()
         )
     )

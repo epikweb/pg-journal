@@ -1,3 +1,5 @@
+const { ExpectedVersion } = require('../constants')
+const { getStorageTable } = require('./stream-core')
 const { unmarshalEvent } = require('../event/event-core')
 const { db } = require('@pg-journal/postgres-client/src/client')
 const { deepFreeze } = require('../auxiliary')
@@ -7,7 +9,7 @@ const unmarshalStream = (rows) => {
   if (rows.length === 0) {
     return {
       events: [],
-      expectedVersion: 0,
+      expectedVersion: ExpectedVersion.NoStream,
     }
   }
 
@@ -21,15 +23,19 @@ const unmarshalStream = (rows) => {
   }
 }
 
-const retrieveStream = ({ client, streamId }) =>
+const retrieveStream = ({ client, streamId, storageTable }) =>
   client.query(
     `
-    select * from pg_journal_events where stream_id = $1 order by sequence_number asc
+    select stream_id, event_type, event_payload, global_index, sequence_number, timestamp from ${storageTable} where stream_id = $1 order by sequence_number asc
   `,
     [streamId]
   )
 
-module.exports = ({ client }) => ({
+module.exports = ({ client, isSystemStream }) => ({
   readStreamForwards: async ({ streamId }) =>
-    retrieveStream({ client, streamId }).then(unmarshalStream),
+    retrieveStream({
+      client,
+      streamId,
+      storageTable: getStorageTable(isSystemStream),
+    }).then(unmarshalStream),
 })

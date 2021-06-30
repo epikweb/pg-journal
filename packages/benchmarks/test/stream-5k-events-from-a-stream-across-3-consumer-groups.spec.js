@@ -5,7 +5,7 @@ const { StreamPosition } = require('@pg-journal/event-store')
 const { ExpectedVersion } = require('@pg-journal/event-store')
 const { benchmarkWrites } = require('../src/harness')
 const { bootstrapEventStoreDb } = require('../src/bootstrap-eventstoredb')
-const { bootstrapPgJournal } = require('../src/bootstrap-pg-journal')
+const { bootstrapPgJournal } = require('@pg-journal/event-store/test/bootstrap')
 const {
   jsonEvent,
   START,
@@ -75,7 +75,7 @@ describe('a benchmark', () => {
     // TODO
 
     await pgJournal.close()
-  }).timeout(120000)
+  })
   it('should benchmark eventstoredb', async () => {
     const config = {
       image: 'eventstore/eventstore:21.2.0-buster-slim',
@@ -206,5 +206,5 @@ describe('a benchmark', () => {
     })
 
     // await eventStoreDb.close()
-  }).timeout(120000)
+  })
 })

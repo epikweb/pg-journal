@@ -30,8 +30,8 @@ const retrieveEventsSinceLastCheckpoint = ({
   client
     .query(
       `
-      select stream_id, event_type, event_payload, global_index, timestamp
-      from pg_journal_events where stream_id = $1 and global_index > $2
+      select stream_id, event_type, event_payload, global_index, timestamp, sequence_number
+      from pg_journal_system_events where stream_id = $1 and global_index > $2
       order by global_index limit $3
   `,
       [streamId, currentCheckpoint, batchSize]
@@ -39,7 +39,7 @@ const retrieveEventsSinceLastCheckpoint = ({
     .then((rows) => rows.map(unmarshalEvent))
 
 module.exports = ({ client }) => ({
-  subscribeToStream: ({
+  subscribeToSystemStream: ({
     streamId,
     batchSize = 500,
     pollInterval = 250,

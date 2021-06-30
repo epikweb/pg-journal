@@ -17,6 +17,8 @@ module.exports.EventStore = ({ client, enabledSystemProjections = [] }) => {
     }),
 
     ...require('./transientSubscription/subscribe-to-all')({ client }),
-    ...require('./transientSubscription/subscribe-to-stream')({ client }),
+    ...require('./transientSubscription/subscribe-to-system-stream')({
+      client,
+    }),
   }
 }

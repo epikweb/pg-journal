@@ -27,25 +27,27 @@ module.exports.PostgresClient = ({
     return client
   }
 
-  return {
-    ...transactionContext({ pool, loggingEnabled }),
-    dropDatabase: () =>
-      connectForDdl().then((client) =>
-        runQuery(
-          client,
-          `
+  const terminateConnections = (client) =>
+    runQuery(
+      client,
+      `
             SELECT pg_terminate_backend(pg_stat_activity.pid)
           FROM pg_stat_activity
           WHERE pg_stat_activity.datname = '${database}'
             AND pid <> pg_backend_pid();
       `
-        )
-          .catch((err) =>
-            log.error(
-              `Unable to terminate connections to ${database}, does it exist?`,
-              err
-            )
-          )
+    ).catch((err) =>
+      log.error(
+        `Unable to terminate connections to ${database}, does it exist?`,
+        err
+      )
+    )
+
+  return {
+    ...transactionContext({ pool, loggingEnabled }),
+    dropDatabase: () =>
+      connectForDdl().then((client) =>
+        terminateConnections(client)
           .then(() =>
             runQuery(client, `drop database ${database};`).catch((err) =>
               log.error(`Unable to drop db, does it exist?`, err)

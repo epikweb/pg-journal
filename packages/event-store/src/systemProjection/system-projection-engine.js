@@ -1,52 +1,61 @@
+const { storageTable } = require('./constants')
 const { SystemProjection } = require('../constants')
 const { EventEmitter } = require('events')
 const { StreamPosition } = require('../constants')
 const { log } = require('../logging')
 const { assert } = require('chai')
 
-const findCurrentCheckpoint = ({ client, name }) =>
-  client
-    .single(
-      `
-                insert into pg_journal_system_projections(name, checkpoint)
-                values($1, $2)
-                on conflict(name) do nothing
-                returning checkpoint
-      `,
-      [name, StreamPosition.Start]
-    )
-    .then((data) => BigInt(data.checkpoint))
-
 module.exports = ({ client }) => ({
   startSystemProjection: ({ name, pollInterval, batchSize }) => {
     assert.include(Object.values(SystemProjection), name)
 
+    const streamId = `projection-${name}`
+
     const emitter = new EventEmitter()
-    findCurrentCheckpoint({
+    require('../stream/read-stream-forwards')({
       client,
-      name,
+      isSystemStream: true,
     })
-      .then((currentCheckpoint) => {
+      .readStreamForwards({ streamId })
+      .then(({ events }) => {
+        const checkpoint =
+          events.length > 0
+            ? BigInt(events[events.length - 1].payload.checkpoint)
+            : StreamPosition.Start
+
         log.debug(
-          `Projection with name: ${name} left off at checkpoint ${currentCheckpoint}. Resuming streaming replication`
+          `System projection with name: ${name} left off at checkpoint ${checkpoint}. Resuming streaming replication`
         )
 
         const stream = require('../transientSubscription/subscribe-to-all')({
           client,
         }).subscribeToAll({
-          lastCheckpoint: currentCheckpoint,
+          lastCheckpoint: checkpoint,
           pollInterval,
           batchSize,
         })
 
         stream.on('error', (err) => emitter.emit(err))
         stream.on('eventsAppeared', ({ events, checkpoint, ack }) => {
-          console.log('Received checkpoint', checkpoint)
+          log.info('Received checkpoint', checkpoint)
           emitter.emit('eventsReadyForProcessing', {
             events,
             ack: () => {
-              console.log(`Acking checkpoint: ${checkpoint}`)
-              ack()
+              log.info(`Acking checkpoint: ${checkpoint}`)
+              require('../stream/append-to-stream')({
+                client,
+                isSystemStream: true,
+              })
+                .appendToStream({
+                  streamId,
+                  events: [
+                    {
+                      type: 'CheckpointAdvanced',
+                      payload: { checkpoint: checkpoint.toString() },
+                    },
+                  ],
+                })
+                .then(ack)
             },
           })
         })

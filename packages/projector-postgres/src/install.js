@@ -9,5 +9,5 @@ module.exports.install = async ({ client }) => {
           name       varchar(255) not null unique
       );
   `)
-  log.debug(`Schema added +${Date.now() - start}ms`)
+  log.debug(`Installed +${Date.now() - start}ms`)
 }
