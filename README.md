@@ -4,32 +4,41 @@
 
 
 
-**Fact** is a framework to build reactive event driven Node.js apps heavily inspired by [EventStoreDB](https://github.com/EventStore/EventStore), [Nact](https://github.com/nactio/nact), [Akka](https://github.com/akka/akka) and [Axon](https://github.com/AxonFramework/AxonFramework).
+**Fact** is a framework to build reactive event driven Node apps heavily inspired by:
+- [Axon](https://github.com/AxonFramework/AxonFramework)
+- [Xoom](https://docs.vlingo.io/xoom-actors)
+- [EventStoreDB](https://github.com/EventStore/EventStore)
+- [Nact](https://github.com/nactio/nact)
+- [Akka](https://github.com/akka/akka)
 
 The goal of the framework is to:
- - Provide a composable set of libraries **without lock-in** that can be used to selectively apply CQRS/Event Sourcing in real world apps where its needed
- - Rely heavily on [🐘 PostgreSQL](https://www.postgresql.org/) for the entire OLTP stack to reduce operational complexity
-
+- Solve the code maintenance problems introduced by **shared mutable state** through the use of **Message Passing** and **Location Transparency** 
+- Rely completely on [🐘 **PostgreSQL**](https://www.postgresql.org/) for the entire OLTP/messaging stack to reduce operational complexity
+- Provide a composable set of packages **without lock-in** that can be used to [**selectively**](https://www.infoq.com/news/2016/04/event-sourcing-anti-pattern/) apply CQRS/Event Sourcing in real world apps where its needed
+- Implement reliable 🎭 **Actor** clustering
+- Provide non-CRUD examples of modeling real world complex domains 
 
 # 🏷 Features
-- ✅ Postgres event store
-- ✅ Postgres projector
-- ✅ **Real world** example [app](/packages/example-multicurrency-ledger)
-- ✅ Performance benchmarks
+- ✅ Event store
+- ✅ Guaranteed global ordering for read models (projections)
+- ✅ Opinionated projectors for common data stores
+- ✅ **Real world** example [apps](/packages/example-multicurrency-ledger)
+- ✅ Performance tests & [reports](/packages/benchmarks)
+
+# ✨ Live Demo
+TODO deploy MMORPG backpack front/backend to heroku
 
 # 🗺️ Roadmap
-- 📌 Competing consumers for reliable IPC similar to [EventStoreDB](https://developers.eventstore.com/clients/dotnet/5.0/subscriptions/persistent-subscriptions.html)
+- 📌 Competing consumers for reliable IPC/parallel event processing similar to [EventStoreDB Persistent Subscriptions](https://developers.eventstore.com/clients/dotnet/5.0/subscriptions/persistent-subscriptions.html) and [Axon Tracking Event Processors](https://axoniq.io/blog-overview/tracking-event-processors)
 - 📌 Benchmark up to 20k transactions/sec (50/50 read/write) on 8 core EC2 instance
 - 📌 Consumer driven contract testing (with [Avro](https://docs.confluent.io/platform/current/schema-registry/index.html))
 - 📌 Redis projector
 - 📌 Basic actor implementation
-- 📌 Support event store table partitioning to solve increasing BTREE index rebuild times
+- 📌 Support journal partitioning to solve increasing btree index rebuild times
 - 📌 Clustered actor implementation
-- 📌 Kafka sink for competing consumer subscriptions
+- 📌 Kafka sink for more scalable competing consumer subscriptions
 
 
-# ✨ Live Demo
-TODO deploy simple front/backend to heroku
 
 # ✍ Documentation
 TODO publish to npm & setup conventional commits
@@ -38,7 +47,7 @@ TODO link to github pages
 
 # 🧪 Contributing
 Pull requests/maintainers are welcome! 😃 
-- Tests should be passing
+- Tests should be green
 - Linting should pass
 
 Install dev dependencies & run tests in a specific package:

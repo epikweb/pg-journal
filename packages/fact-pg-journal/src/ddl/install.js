@@ -39,23 +39,24 @@ module.exports.install = async ({ client }) => {
 
       create table if not exists public.pg_journal_consumer_groups
       (
-          id  bigserial unique primary key,
+          id  bigserial,
           stream_id  varchar(255)   not null,
           consumer_group_name  varchar(255)   not null,
           checkpoint    bigint not null,
-          leader_node_id varchar(255) not null references public.pg_journal_consumer_group_nodes(node_id) not null,
+          leader_node_id varchar(255) not null,
           last_leader_lease_renewal timestamptz not null default now(),
           primary key (stream_id, consumer_group_name)
       );
       create table if not exists public.pg_journal_consumer_group_nodes
       (
           id  bigserial unique primary key,
-          consumer_group_id bigint references public.pg_journal_consumer_groups(id) not null,
+          consumer_group_id bigint,
           node_id  varchar(255) not null,
           min_checkpoint    bigint not null,
           max_checkpoint    bigint not null,
           last_lease_renewal timestamptz not null default now()
       );
+
 `)
 
   log.debug(`Installed +${Date.now() - start}ms`)

@@ -4,7 +4,6 @@ const {assert} = require('chai')
 
 module.exports = ({ client }) => ({
   registerConsumerGroup: ({ streamId, consumerGroupName }) => {
-    const streamId = `event-bus-consumer-group@${streamSuffix}`
 
     const options = { client, isSystemStream: true }
     const { expectedVersion } = require('../stream/read-stream-forwards')(options).readStreamForwards({ streamId })
