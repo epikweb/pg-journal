@@ -4,7 +4,7 @@
 
 
 
-**⚡ Boost** is a framework to build reactive event driven Node apps heavily inspired by:
+**⚡ Boost** is a platform to build reactive event driven Node apps heavily inspired by:
 - [Axon](https://github.com/AxonFramework/AxonFramework)
 - [Xoom](https://docs.vlingo.io/xoom-actors)
 - [EventStoreDB](https://github.com/EventStore/EventStore)
