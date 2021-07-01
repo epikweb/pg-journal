@@ -1,10 +1,10 @@
-# 📔 Fact
+# ⚡ Boost
 [![license](https://img.shields.io/static/v1?label=license&message=apache%202&color=green)](/LICENSE)
 ![beta](https://img.shields.io/static/v1?label=status&message=in%20development&color=blueviolet)
 
 
 
-**Fact** is a framework to build reactive event driven Node apps heavily inspired by:
+**⚡ Boost** is a framework to build reactive event driven Node apps heavily inspired by:
 - [Axon](https://github.com/AxonFramework/AxonFramework)
 - [Xoom](https://docs.vlingo.io/xoom-actors)
 - [EventStoreDB](https://github.com/EventStore/EventStore)
