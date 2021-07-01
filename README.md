@@ -6,7 +6,7 @@
 
 **⚡ Boost** is a platform to build reactive event driven Node apps heavily inspired by:
 - [Axon](https://github.com/AxonFramework/AxonFramework)
-- [Xoom](https://docs.vlingo.io/xoom-actors)
+- [Xoom](https://docs.vlingo.io/)
 - [EventStoreDB](https://github.com/EventStore/EventStore)
 - [Nact](https://github.com/nactio/nact)
 - [Akka](https://github.com/akka/akka)
