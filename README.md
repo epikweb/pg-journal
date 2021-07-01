@@ -12,7 +12,7 @@
 - [Akka](https://github.com/akka/akka)
 
 ### The Goal:
-- Solve the code maintenance problems introduced by **shared mutable state** through the use of **Message Passing** and **Location Transparency** 
+- Solve the code maintenance problems introduced by **shared mutable state** through the use of **Message Passing**, **Location Transparency** and **Functional Programming**
 - Rely completely on [🐘 **PostgreSQL**](https://www.postgresql.org/) for the entire OLTP/messaging stack to reduce operational complexity
 - Provide a composable set of packages **without lock-in** that can be used to [**selectively**](https://www.infoq.com/news/2016/04/event-sourcing-anti-pattern/) apply CQRS/Event Sourcing in real world apps where its needed
 - Implement reliable 🎭 **Actor** clustering
