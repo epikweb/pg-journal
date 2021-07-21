@@ -36,7 +36,7 @@ $ yarn
 $ yarn workspace fact-pg-journal test
 ```
 
-### Update
+# Update
 
 I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer).
 
