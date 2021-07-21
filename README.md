@@ -1,15 +1,17 @@
-# ⚡ Boost
+# 🐘 pg-journal
 [![license](https://img.shields.io/static/v1?label=license&message=apache%202&color=green)](/LICENSE)
 ![beta](https://img.shields.io/static/v1?label=status&message=proof-of-concept&color=blueviolet)
 
 ### Update
 
-I've decided to not spend further time developing this approach due to its high cost (event sourcing on the application layer). Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) available. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
+I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer).
 
-I will start another project detailing this approach using Postgres for the entire stack.
+Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) have been shown to be scalable to petabytes whereas this approach does not. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
+
+I will start another project detailing Lambda Architecture using Postgres for the entire stack.
 
 
-**⚡ Boost** is a platform to build reactive event driven Node apps heavily inspired by:
+**🐘 pg-journal** is a proof of concept of application layer event sourcing inspired by:
 - [Axon](https://github.com/AxonFramework/AxonFramework)
 - [Xoom](https://docs.vlingo.io/)
 - [EventStoreDB](https://github.com/EventStore/EventStore)
@@ -17,7 +19,6 @@ I will start another project detailing this approach using Postgres for the enti
 - [Akka](https://github.com/akka/akka)
 
 ### The Goal:
-- Solve the code maintenance problems introduced by **shared mutable state** through the use of **Message Passing**, **Location Transparency** and **Functional Programming**
 - Rely completely on [🐘 **PostgreSQL**](https://www.postgresql.org/) for the entire OLTP/messaging stack to reduce operational complexity
 - Provide a composable set of packages **without lock-in** that can be used to [**selectively**](https://www.infoq.com/news/2016/04/event-sourcing-anti-pattern/) apply CQRS/Event Sourcing in real world apps where its needed
 - Provide non-CRUD examples of modeling real world complex domains 
@@ -25,15 +26,10 @@ I will start another project detailing this approach using Postgres for the enti
 
 # 🏷 Features
 - ✅ Event store
-- ✅ Guaranteed global ordering for read models (projections)
-- ✅ Opinionated projectors for common data stores
+- ✅ Guaranteed global ordering/gap handling for read models (projections)
+- ✅ Opinionated projectors for postgres
 - ✅ **Real world** example [apps](/packages/example-multicurrency-ledger)
 - ✅ Performance tests & [reports](/packages/benchmarks)
-
-
-# ✍ Documentation
-TODO publish to npm & setup conventional commits
-TODO link to github pages
 
 
 # 🧪 Contributing
