@@ -2,14 +2,6 @@
 [![license](https://img.shields.io/static/v1?label=license&message=apache%202&color=green)](/LICENSE)
 ![beta](https://img.shields.io/static/v1?label=status&message=proof-of-concept&color=blueviolet)
 
-### Update
-
-I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer).
-
-Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) have been shown to be scalable to petabytes whereas this approach does not. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
-
-I will start another project detailing Lambda Architecture using Postgres for the entire stack.
-
 
 **🐘 pg-journal** is a proof of concept of application layer event sourcing inspired by:
 - [Axon](https://github.com/AxonFramework/AxonFramework)
@@ -22,6 +14,7 @@ I will start another project detailing Lambda Architecture using Postgres for th
 - Rely completely on [🐘 **PostgreSQL**](https://www.postgresql.org/) for the entire OLTP/messaging stack to reduce operational complexity
 - Provide a composable set of packages **without lock-in** that can be used to [**selectively**](https://www.infoq.com/news/2016/04/event-sourcing-anti-pattern/) apply CQRS/Event Sourcing in real world apps where its needed
 - Provide non-CRUD examples of modeling real world complex domains 
+
 
 
 # 🏷 Features
@@ -42,6 +35,15 @@ Install dev dependencies & run tests in a specific package:
 $ yarn
 $ yarn workspace fact-pg-journal test
 ```
+
+### Update
+
+I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer).
+
+Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) have been shown to be scalable to petabytes whereas this approach does not. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
+
+I will start another project detailing Lambda Architecture using Postgres for the entire stack.
+
 
 # 💡 License
 This project is licensed under the terms of the [Apache 2.0 license](/LICENSE).
