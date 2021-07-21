@@ -1,6 +1,6 @@
 # ⚡ Boost
 [![license](https://img.shields.io/static/v1?label=license&message=apache%202&color=green)](/LICENSE)
-![beta](https://img.shields.io/static/v1?label=status&message=in%20proof-of-concept&color=blueviolet)
+![beta](https://img.shields.io/static/v1?label=status&message=proof-of-concept&color=blueviolet)
 
 ### Update
 
