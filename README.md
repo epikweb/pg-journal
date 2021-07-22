@@ -26,7 +26,7 @@ I've decided to not spend further time developing this approach due to its high 
 
 Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) have been shown to be scalable to petabytes whereas this approach does not. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
 
-I will start another project investigating Lambda Architecture using Postgres (with CDC) for the entire stack.
+I will start another project investigating Lambda Architecture using Postgres (with CDC) for the entire stack with Spark + Kinesis.
 
 
 # 🏷 Features
