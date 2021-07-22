@@ -3,6 +3,15 @@
 ![beta](https://img.shields.io/static/v1?label=status&message=proof-of-concept&color=blueviolet)
 
 
+# Update
+
+I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer).
+
+Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) have been shown to be scalable to petabytes whereas this approach does not. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
+
+I will start another project detailing Lambda Architecture using Postgres for the entire stack.
+
+
 **🐘 pg-journal** is a Proof of Concept Application Layer Event Sourcing inspired by:
 - [Axon](https://github.com/AxonFramework/AxonFramework)
 - [Xoom](https://docs.vlingo.io/)
@@ -35,14 +44,6 @@ Install dev dependencies & run tests in a specific package:
 $ yarn
 $ yarn workspace fact-pg-journal test
 ```
-
-# Update
-
-I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer).
-
-Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) have been shown to be scalable to petabytes whereas this approach does not. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
-
-I will start another project detailing Lambda Architecture using Postgres for the entire stack.
 
 
 # 💡 License
