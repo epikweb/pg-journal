@@ -18,7 +18,11 @@
 
 # Update
 
-I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer).
+I've decided to not spend further time developing this approach due to its high cost and complexity (event sourcing on the application layer). Cons discovered:
+
+- Reinventing powerful SQL operation such as group by/joins on the application layer
+- Slow read model rebuild times with a large dataset
+- Versionining online read models becomes a huge problem
 
 Approaches such as [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) and [Kappa Architecture](https://eng.uber.com/kappa-architecture-data-stream-processing/) have been shown to be scalable to petabytes whereas this approach does not. The batch processing side can be implemented by reading Postgres disk files and running a large Spark cluster on it, and stream processing done using Kinesis + Spark Streams.
 
