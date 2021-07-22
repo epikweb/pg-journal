@@ -3,7 +3,7 @@
 ![beta](https://img.shields.io/static/v1?label=status&message=proof-of-concept&color=blueviolet)
 
 
-**🐘 pg-journal** is a proof of concept of application layer event sourcing inspired by:
+**🐘 pg-journal** is a Proof of Concept Application Layer Event Sourcing inspired by:
 - [Axon](https://github.com/AxonFramework/AxonFramework)
 - [Xoom](https://docs.vlingo.io/)
 - [EventStoreDB](https://github.com/EventStore/EventStore)
